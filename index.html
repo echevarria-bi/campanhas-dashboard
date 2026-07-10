@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Dashboard de Campanhas</title>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0b0d14;color:#e1e7ef}
+    header{background:linear-gradient(135deg,#11131c,#1a1d27);border-bottom:1px solid #1e1b4b;padding:20px 32px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+    header h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,#f59e0b,#fb923c,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px}
+    .container{max-width:1200px;margin:0 auto;padding:24px 32px}
+    .upload-area{display:block;border:2px dashed #1e1b4b;border-radius:16px;padding:56px;text-align:center;background:linear-gradient(135deg,#11131c,#1a1d27);cursor:pointer;transition:.3s}
+    .upload-area:hover{border-color:#f59e0b;background:linear-gradient(135deg,#151830,#1e2030)}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
+    .card{background:linear-gradient(135deg,#11131c,#1a1d27);border:1px solid #1e1b4b;border-radius:14px;padding:20px 24px;transition:.2s}
+    .card:hover{border-color:#f59e0b;transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,158,11,.08)}
+    .card .label{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px}
+    .card .value{font-size:26px;font-weight:800;margin-top:3px;color:#f0f2f8;line-height:1.2}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+    @media(max-width:768px){.grid-2,.cards{grid-template-columns:1fr}.container{padding:16px}}
+    .chart-box{background:linear-gradient(135deg,#11131c,#1a1d27);border:1px solid #1e1b4b;border-radius:14px;padding:20px;margin-bottom:20px;transition:.2s}
+    .chart-box:hover{border-color:#78350f}
+    .chart-box h2{font-size:12px;font-weight:700;margin-bottom:14px;color:#fcd34d;text-transform:uppercase;letter-spacing:.7px;padding-left:10px;border-left:3px solid #f59e0b}
+    .chart-box h2 .sub{font-size:11px;color:#d1d5db;font-weight:400;text-transform:none;letter-spacing:0}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{padding:10px 12px;text-align:left;font-weight:600;color:#f59e0b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:#11131c;border-bottom:1px solid #1e1b4b}
+    td{padding:9px 12px;text-align:left;border-bottom:1px solid #11131c;color:#c4c9d4;font-variant-numeric:tabular-nums}
+    tbody tr:hover{background:#151830!important}
+    tbody tr:nth-child(even){background:#0f1119}
+    .table-wrap{max-height:400px;overflow-y:auto;overflow-x:auto;border:1px solid #1e1b4b;border-radius:10px}
+    .table-wrap thead th{position:sticky;top:0;z-index:3;background:#0b0d14;box-shadow:0 1px 0 #1e1b4b}
+    .table-wrap tbody .tot-row td{position:sticky;bottom:0;z-index:2;background:#151830!important;box-shadow:0 -1px 0 #f59e0b}
+    .text-right{text-align:right}
+    .tot-row td{background:#151830!important;border-top:2px solid #f59e0b;font-weight:700}
+    footer{text-align:center;padding:16px 20px;font-size:11px;color:#4a4d6e;border-top:1px solid #1e1b4b;margin-top:24px}
+    footer strong{color:#6b7280}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>&#128222; Dashboard de Campanhas</h1>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span id="statusFile" style="font-size:11px;color:#6b7280"></span>
+      <button onclick="novoArquivo()" style="background:#1e1b4b;border:1px solid #78350f;color:#fcd34d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:none" id="btnNovoArquivo">&#128193; Novo arquivo</button>
+    </div>
+  </header>
+  <div class="container" id="app">
+    <div style="position:relative;width:100%">
+      <input type="file" id="inputArquivo" accept=".xlsx,.xls" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:5;font-size:0" onchange="processFile(this.files[0])">
+      <div class="upload-area" id="areaInicial" ondragover="this.classList.add('dragover');event.preventDefault()" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');if(event.dataTransfer.files[0])processFile(event.dataTransfer.files[0])">
+        <div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div>
+        <div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div>
+        <div style="font-size:13px;color:#4a4d6e;margin-top:4px">base_campanhas.xlsx</div>
+      </div>
+    </div>
+  </div>
+  <div id="dashContent"></div>
+  <footer id="footer" style="display:none"></footer>
+
+  <script>
+    function processFile(file) {
+      if (!file) return;
+      document.getElementById('areaInicial').innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Processando ' + file.name + '...</div>';
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          var data = new Uint8Array(ev.target.result);
+          var wb = XLSX.read(data, {type:'array'});
+          var dados = parseCampanhas(wb);
+          renderCampanhas(dados);
+          document.getElementById('areaInicial').parentElement.style.display = 'none';
+          document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
+          var now = new Date();
+          document.getElementById('footer').style.display = 'block';
+          document.getElementById('footer').innerHTML = '<strong>' + file.name + '</strong> &middot; ' + now.toLocaleDateString('pt-BR') + ' &agrave;s ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+          document.getElementById('statusFile').textContent = 'Carregado';
+          document.getElementById('statusFile').style.color = '#34d399';
+          setTimeout(function() { document.getElementById('statusFile').textContent = ''; }, 3000);
+        } catch(err) {
+          document.getElementById('areaInicial').innerHTML = '<div style="font-size:40px;margin-bottom:8px">&#9888;</div><div style="color:#f87171;font-size:14px">Erro: ' + err.message + '</div><div style="color:#4a4d6e;font-size:12px;margin-top:4px;cursor:pointer" onclick="document.getElementById(\'inputArquivo\').click()">Clique para tentar novamente</div>';
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function novoArquivo() {
+      document.getElementById('areaInicial').parentElement.style.display = 'block';
+      document.getElementById('areaInicial').innerHTML = '<div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">base_campanhas.xlsx</div>';
+      document.getElementById('dashContent').innerHTML = '';
+      document.getElementById('footer').style.display = 'none';
+      document.getElementById('btnNovoArquivo').style.display = 'none';
+    }
+
+    function parseCampanhas(wb) {
+      var raw = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, defval:''});
+      var rows = [];
+      for (var ri = 1; ri < raw.length; ri++) {
+        var r = raw[ri];
+        if (!r || !r[0]) continue;
+        rows.push({
+          id: r[0],
+          resposta: r[1],
+          cod: r[2],
+          vendedor: r[3],
+          setor: r[4],
+          regiao: r[5],
+          supervisor: r[6],
+          data: typeof r[7] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[7]) : r[7],
+          valor: parseFloat(r[8]) || 0,
+          campanhaM: r[10],
+          dataN: typeof r[11] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[11]) : r[11],
+          totalClientes: r[12],
+          receberam: r[13]
+        });
+      }
+      return rows;
+    }
+
+    function fmtCurr(v) { if (v==null||isNaN(v)) return '-'; return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+    var icn = function(n,s){s=s||14; return '<i data-lucide="'+n+'" style="display:inline-block;width:'+s+'px;height:'+s+'px;vertical-align:middle;stroke:currentColor;stroke-width:2;flex-shrink:0;margin-right:4px"></i>';};
+
+    function renderCampanhas(dados) {
+      if (!dados || !dados.length) {
+        document.getElementById('dashContent').innerHTML = '<div class="chart-box"><h2>Campanhas <span class="sub">&rarr; Base de campanhas</span></h2><div style="text-align:center;padding:40px;color:#6b7280">Nenhum dado dispon\u00EDvel.</div></div>';
+        return;
+      }
+      var totalLeads = dados.length;
+      var totalValor = dados.reduce(function(s,r){return s+r.valor;},0);
+      var totalRecuperados = dados.filter(function(r){return r.valor > 0;}).length;
+
+      var html = '<div class="cards">';
+      html += '<div class="card"><div class="label">Recuperados</div><div class="value" style="color:#34d399">' + totalRecuperados + '</div></div>';
+      html += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
+      html += '</div>';
+
+      var datasMP = {};
+      for (var mi = 0; mi < dados.length; mi++) {
+        var mr = dados[mi];
+        if (!mr.campanhaM || !mr.dataN) continue;
+        if (!datasMP[mr.dataN]) datasMP[mr.dataN] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
+        if (datasMP[mr.dataN].campanhas.indexOf(mr.campanhaM) < 0) datasMP[mr.dataN].campanhas.push(mr.campanhaM);
+        if (mr.setor && datasMP[mr.dataN].setores.indexOf(mr.setor) < 0) datasMP[mr.dataN].setores.push(mr.setor);
+      }
+
+      var leadsPorData = {};
+      for (var mi = 0; mi < dados.length; mi++) {
+        var mr = dados[mi];
+        if (!mr.data) continue;
+        if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0};
+        leadsPorData[mr.data].total++;
+        if (mr.valor > 0) { leadsPorData[mr.data].recup++; leadsPorData[mr.data].faturamento += mr.valor; }
+      }
+
+      var allDates = Object.keys(datasMP);
+      Object.keys(leadsPorData).forEach(function(d) {
+        if (allDates.indexOf(d) < 0) allDates.push(d);
+      });
+      allDates.sort();
+
+      if (allDates.length) {
+        var tCli = 0, tRec = 0, tL = 0, tR = 0, tFat = 0;
+        allDates.forEach(function(dt) {
+          var mp = datasMP[dt] || {};
+          var l = leadsPorData[dt] || {};
+          tCli += parseFloat(mp.totalClientes) || 0;
+          tRec += parseFloat(mp.receberam) || 0;
+          tL += l.total || 0;
+          tR += l.recup || 0;
+          tFat += l.faturamento || 0;
+        });
+        var funnelMax = Math.max(tCli, tRec, tL, totalRecuperados, 1);
+
+        function funnelBar(label, valor, pct, color, idx) {
+          var w = Math.max(valor / funnelMax * 100, 8);
+          var left = (100 - w) / 2;
+          return '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px">' +
+            '<div style="font-size:11px;color:#9ca3af;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">' + label + '</div>' +
+            '<div style="position:relative;width:90%;max-width:360px;height:52px;overflow:hidden;border-radius:8px;background:rgba(255,255,255,0.03)">' +
+            '<div style="position:absolute;bottom:0;left:' + left + '%;width:' + w + '%;height:100%;background:linear-gradient(180deg,' + color + '22,' + color + 'cc);border-radius:8px 8px 4px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid ' + color + '66;transition:all 0.3s">' +
+            '<span style="font-size:20px;font-weight:800;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.6);line-height:1.1">' + (typeof valor === 'number' ? valor.toLocaleString('pt-BR') : valor) + '</span>' +
+            '<span style="font-size:11px;color:' + color + ';font-weight:600;opacity:0.9">' + pct + '</span>' +
+            '</div></div></div>';
+        }
+
+        var custoPorMsg = 0.54;
+        var totalReceberam = Object.keys(datasMP).reduce(function(s,dt){return s + (parseFloat(datasMP[dt].receberam)||0);}, 0);
+        var custoTotal = totalReceberam * custoPorMsg;
+        var fatGlobal = totalValor;
+        var ticketMedio = totalRecuperados > 0 ? fatGlobal / totalRecuperados : 0;
+        var roi = custoTotal > 0 ? ((fatGlobal - custoTotal) / custoTotal * 100) : 0;
+        var lucroLiquido = fatGlobal - custoTotal;
+        var custoPorRecuperado = totalRecuperados > 0 ? custoTotal / totalRecuperados : 0;
+
+        html += '<div class="grid-2">';
+        html += '<div class="chart-box" style="display:flex;flex-direction:column">';
+        html += '<h2 style="margin-bottom:16px">' + icn('bar-chart-3',14) + ' Custo vs Retorno <span class="sub">&rarr; R$ 0,54 por mensagem enviada</span></h2>';
+        html += '<div style="padding:16px 0;flex:1;display:flex;flex-direction:column;justify-content:center">';
+        var st = function(label, valor, cor, form) { var f = form === 'curr' ? fmtCurr : function(v) { return typeof v === 'number' ? v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : v; }; var sufixo = form === 'pct' ? '%' : ''; return '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1e1b4b"><span style="color:#f3f4f6;font-size:15px">' + label + '</span><span style="color:' + cor + ';font-size:22px;font-weight:800">' + f(valor) + sufixo + '</span></div>'; };
+        html += st('Total Investido (R$ 0,54 \u00D7 ' + totalReceberam.toLocaleString('pt-BR') + ' receberam)', custoTotal, '#f87171', 'curr');
+        html += st('Lucro L\u00EDquido', lucroLiquido, lucroLiquido >= 0 ? '#34d399' : '#f87171', 'curr');
+        html += st('ROI', roi, roi >= 0 ? '#34d399' : '#f87171', 'pct');
+        html += st('Ticket M\u00E9dio por Recuperado', ticketMedio, '#60a5fa', 'curr');
+        html += st('Custo por Recuperado', custoPorRecuperado, '#a78bfa', 'curr');
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1e1b4b"><span style="color:#f3f4f6;font-size:15px">Recuperados</span><span style="color:#34d399;font-size:22px;font-weight:800">' + totalRecuperados.toLocaleString('pt-BR') + '</span></div>';
+        html += '</div></div>';
+        html += '<div class="chart-box" style="display:flex;flex-direction:column">';
+        html += '<h2 style="margin-bottom:16px">' + icn('funnel',14) + ' Funil de Convers\u00E3o <span class="sub">&rarr; Fluxo geral</span></h2>';
+        html += '<div style="padding:10px 0;flex:1;display:flex;flex-direction:column;justify-content:center">';
+        html += funnelBar('Total Clientes', tCli, '100%', '#60a5fa', 0);
+        html += funnelBar('Receberam', tRec, tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0', '#a78bfa', 1);
+        html += funnelBar('Contatos Gerados', totalLeads, tCli > 0 ? (totalLeads / tCli * 100).toFixed(1) : '0', '#34d399', 2);
+        html += funnelBar('Recuperados', totalRecuperados, tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0', '#f59e0b', 3);
+        html += '</div></div>';
+        html += '</div>';
+
+        html += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P por data, com leads na mesma data</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanhas</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        for (var di = 0; di < allDates.length; di++) {
+          var dt = allDates[di];
+          var mp = datasMP[dt] || {campanhas:['—'], totalClientes: null, receberam: null};
+          var l = leadsPorData[dt] || {total:0, recup:0};
+          var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
+          html += '<tr>' +
+            '<td style="font-weight:600">' + dt + '</td>' +
+            '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (mp.setores && mp.setores.length ? mp.setores.join('<br>') : '—') + '</td>' +
+            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + mp.campanhas.join('<br>') + '</td>' +
+            '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
+            '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
+            '<td class="text-right" style="color:#34d399">' + l.total + '</td>' +
+            '<td class="text-right" style="color:#34d399">' + l.recup + '</td>' +
+            '<td class="text-right" style="color:#fbbf24">' + fmtCurr(l.faturamento) + '</td>' +
+            '<td style="color:#f59e0b">' + pct + '%</td></tr>';
+        }
+        html += '<tr class="tot-row"><td style="font-weight:700">Total</td><td></td><td></td>' +
+          '<td class="text-right" style="font-weight:700">' + tCli + '</td>' +
+          '<td class="text-right" style="font-weight:700">' + tRec + '</td>' +
+          '<td class="text-right" style="font-weight:700;color:#34d399">' + tL + '</td>' +
+          '<td class="text-right" style="font-weight:700;color:#34d399">' + tR + '</td>' +
+          '<td class="text-right" style="font-weight:700;color:#fbbf24">' + fmtCurr(tFat) + '</td>' +
+          '<td style="font-weight:700;color:#f59e0b">' + (tL > 0 ? (tR / tL * 100).toFixed(1) : '0.0') + '%</td></tr>';
+        html += '</tbody></table></div></div>';
+      }
+
+      document.getElementById('dashContent').innerHTML = html;
+      try { lucide.createIcons(); } catch(e) {}
+    }
+  </script>
+  <style>
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid #1e1b4b;border-top-color:#f59e0b;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</body>
+</html>
