@@ -191,40 +191,44 @@
       }
     }
 
-    function filterByMonth(dados, monthNum) {
-      return dados.filter(function(r) { return extractMonth(r.data) === monthNum; });
-    }
-
     function renderContent(tab, dados, meses, monthKeys) {
       var isGeral = tab === 'geral';
       var monthNum = isGeral ? 0 : parseInt(tab.replace('m',''), 10);
-      var filtered = isGeral ? dados : filterByMonth(dados, monthNum);
-      var totalLeads = filtered.length;
-      var totalValor = filtered.reduce(function(s,r){return s+r.valor;},0);
-      var totalRecuperados = filtered.filter(function(r){return r.valor > 0;}).length;
 
-      var h = '<div class="cards">';
-      h += '<div class="card"><div class="label">Recuperados</div><div class="value" style="color:#34d399">' + totalRecuperados + '</div></div>';
-      h += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
-      h += '</div>';
+      function matchMonth(d, m) { return m === 0 || extractMonth(d) === m; }
 
+      var filtered = dados;
+
+      // Build datasMP from rows matching month by dataN
       var datasMP = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
         if (!mr.campanhaM || !mr.dataN) continue;
+        if (!matchMonth(mr.dataN, monthNum)) continue;
         if (!datasMP[mr.dataN]) datasMP[mr.dataN] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
         if (datasMP[mr.dataN].campanhas.indexOf(mr.campanhaM) < 0) datasMP[mr.dataN].campanhas.push(mr.campanhaM);
         if (mr.setor && datasMP[mr.dataN].setores.indexOf(mr.setor) < 0) datasMP[mr.dataN].setores.push(mr.setor);
       }
 
+      // Build leadsPorData from rows matching month by data
       var leadsPorData = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
         if (!mr.data) continue;
+        if (!matchMonth(mr.data, monthNum)) continue;
         if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0};
         leadsPorData[mr.data].total++;
         if (mr.valor > 0) { leadsPorData[mr.data].recup++; leadsPorData[mr.data].faturamento += mr.valor; }
       }
+
+      // Cards use lead data for the month
+      var totalLeads = 0, totalValor = 0, totalRecuperados = 0;
+      Object.keys(leadsPorData).forEach(function(d) {
+        var l = leadsPorData[d];
+        totalLeads += l.total;
+        totalRecuperados += l.recup;
+        totalValor += l.faturamento;
+      });
 
       var allDates = Object.keys(datasMP);
       Object.keys(leadsPorData).forEach(function(d) {
