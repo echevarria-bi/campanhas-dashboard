@@ -230,6 +230,11 @@
         totalValor += l.faturamento;
       });
 
+      var h = '<div class="cards">';
+      h += '<div class="card"><div class="label">Recuperados</div><div class="value" style="color:#34d399">' + totalRecuperados + '</div></div>';
+      h += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
+      h += '</div>';
+
       var allDates = Object.keys(datasMP);
       Object.keys(leadsPorData).forEach(function(d) {
         if (allDates.indexOf(d) < 0) allDates.push(d);
