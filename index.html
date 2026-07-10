@@ -217,9 +217,9 @@
       var leadsPorData = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
-        if (!mr.data || !mr.campanha) continue;
+        if (!mr.data) continue;
         if (!matchMonth(mr.data, monthNum)) continue;
-        var key = mr.data + '|' + mr.campanha;
+        var key = mr.data + (mr.campanha ? '|' + mr.campanha : '');
         if (!leadsPorData[key]) leadsPorData[key] = {total:0, recup:0, faturamento:0, setores:[]};
         leadsPorData[key].total++;
         if (mr.valor > 0) { leadsPorData[key].recup++; leadsPorData[key].faturamento += mr.valor; }
@@ -311,7 +311,7 @@
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
           var parts = key.split('|');
-          var dt = parts[0], camp = parts[1];
+          var dt = parts[0], camp = parts.length > 1 ? parts[1] : '';
           var mp = datasMP[key] || {totalClientes: null, receberam: null, setores:[]};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
           var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
