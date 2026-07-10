@@ -216,9 +216,10 @@
         var mr = filtered[mi];
         if (!mr.data) continue;
         if (!matchMonth(mr.data, monthNum)) continue;
-        if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0};
+        if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0, setores:[]};
         leadsPorData[mr.data].total++;
         if (mr.valor > 0) { leadsPorData[mr.data].recup++; leadsPorData[mr.data].faturamento += mr.valor; }
+        if (mr.setor && leadsPorData[mr.data].setores.indexOf(mr.setor) < 0) leadsPorData[mr.data].setores.push(mr.setor);
       }
 
       // Cards use lead data for the month
@@ -300,12 +301,13 @@
         h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P por data, com leads na mesma data</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanhas</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
         for (var di = 0; di < allDates.length; di++) {
           var dt = allDates[di];
-          var mp = datasMP[dt] || {campanhas:['—'], totalClientes: null, receberam: null};
-          var l = leadsPorData[dt] || {total:0, recup:0};
+          var mp = datasMP[dt] || {campanhas:['—'], totalClientes: null, receberam: null, setores:[]};
+          var l = leadsPorData[dt] || {total:0, recup:0, setores:[]};
+          var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
           var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
-            '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (mp.setores && mp.setores.length ? mp.setores.join('<br>') : '—') + '</td>' +
+            '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
             '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + mp.campanhas.join('<br>') + '</td>' +
             '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
