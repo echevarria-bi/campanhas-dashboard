@@ -207,9 +207,10 @@
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
         var key = mr.dataN + '|' + mr.campanhaM;
-        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: [], campanhasI: []};
         if (datasMP[key].campanhas.indexOf(mr.campanhaM) < 0) datasMP[key].campanhas.push(mr.campanhaM);
         if (mr.setor && datasMP[key].setores.indexOf(mr.setor) < 0) datasMP[key].setores.push(mr.setor);
+        if (mr.campanha && datasMP[key].campanhasI.indexOf(mr.campanha) < 0) datasMP[key].campanhasI.push(mr.campanha);
       }
 
       // Build leadsPorData from rows matching month by data+campanha
@@ -318,7 +319,7 @@
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
-            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + camp + '</td>' +
+            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + (mp.campanhasI && mp.campanhasI.length ? mp.campanhasI.join('<br>') : camp) + '</td>' +
             '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
             '<td class="text-right" style="color:#34d399">' + l.total + '</td>' +
