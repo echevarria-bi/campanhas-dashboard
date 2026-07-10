@@ -124,11 +124,12 @@
           regiao: r[5],
           supervisor: r[6],
           data: typeof r[7] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[7]) : r[7],
-          valor: parseFloat(r[8]) || 0,
-          campanhaM: r[10],
-          dataN: typeof r[11] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[11]) : r[11],
-          totalClientes: r[12],
-          receberam: r[13]
+          campanha: r[8],
+          valor: parseFloat(r[9]) || 0,
+          campanhaM: r[11],
+          dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : r[12],
+          totalClientes: r[13],
+          receberam: r[14]
         });
       }
       return rows;
@@ -199,27 +200,29 @@
 
       var filtered = dados;
 
-      // Build datasMP from rows matching month by dataN
+      // Build datasMP from rows matching month by dataN+campanhaM
       var datasMP = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
-        if (!datasMP[mr.dataN]) datasMP[mr.dataN] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
-        if (datasMP[mr.dataN].campanhas.indexOf(mr.campanhaM) < 0) datasMP[mr.dataN].campanhas.push(mr.campanhaM);
-        if (mr.setor && datasMP[mr.dataN].setores.indexOf(mr.setor) < 0) datasMP[mr.dataN].setores.push(mr.setor);
+        var key = mr.dataN + '|' + mr.campanhaM;
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
+        if (datasMP[key].campanhas.indexOf(mr.campanhaM) < 0) datasMP[key].campanhas.push(mr.campanhaM);
+        if (mr.setor && datasMP[key].setores.indexOf(mr.setor) < 0) datasMP[key].setores.push(mr.setor);
       }
 
-      // Build leadsPorData from rows matching month by data
+      // Build leadsPorData from rows matching month by data+campanha
       var leadsPorData = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
-        if (!mr.data) continue;
+        if (!mr.data || !mr.campanha) continue;
         if (!matchMonth(mr.data, monthNum)) continue;
-        if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0, setores:[]};
-        leadsPorData[mr.data].total++;
-        if (mr.valor > 0) { leadsPorData[mr.data].recup++; leadsPorData[mr.data].faturamento += mr.valor; }
-        if (mr.setor && leadsPorData[mr.data].setores.indexOf(mr.setor) < 0) leadsPorData[mr.data].setores.push(mr.setor);
+        var key = mr.data + '|' + mr.campanha;
+        if (!leadsPorData[key]) leadsPorData[key] = {total:0, recup:0, faturamento:0, setores:[]};
+        leadsPorData[key].total++;
+        if (mr.valor > 0) { leadsPorData[key].recup++; leadsPorData[key].faturamento += mr.valor; }
+        if (mr.setor && leadsPorData[key].setores.indexOf(mr.setor) < 0) leadsPorData[key].setores.push(mr.setor);
       }
 
       // Cards use lead data for the month
@@ -236,17 +239,22 @@
       h += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
       h += '</div>';
 
-      var allDates = Object.keys(datasMP);
-      Object.keys(leadsPorData).forEach(function(d) {
-        if (allDates.indexOf(d) < 0) allDates.push(d);
+      // allKeys = compound keys date|campaign from both datasMP and leadsPorData
+      var allKeys = Object.keys(datasMP);
+      Object.keys(leadsPorData).forEach(function(k) {
+        if (allKeys.indexOf(k) < 0) allKeys.push(k);
       });
-      allDates.sort();
+      allKeys.sort(function(a,b) {
+        var pa = a.split('|'), pb = b.split('|');
+        var da = pa[0].split('/'), db = pb[0].split('/');
+        return da[2]-db[2] || da[1]-db[1] || da[0]-db[0] || (pa[1] < pb[1] ? -1 : pa[1] > pb[1] ? 1 : 0);
+      });
 
-      if (allDates.length) {
+      if (allKeys.length) {
         var tCli = 0, tRec = 0, tL = 0, tR = 0, tFat = 0;
-        allDates.forEach(function(dt) {
-          var mp = datasMP[dt] || {};
-          var l = leadsPorData[dt] || {};
+        allKeys.forEach(function(key) {
+          var mp = datasMP[key] || {};
+          var l = leadsPorData[key] || {};
           tCli += parseFloat(mp.totalClientes) || 0;
           tRec += parseFloat(mp.receberam) || 0;
           tL += l.total || 0;
@@ -298,17 +306,19 @@
         h += '</div></div>';
         h += '</div>';
 
-        h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P por data, com leads na mesma data</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanhas</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
-        for (var di = 0; di < allDates.length; di++) {
-          var dt = allDates[di];
-          var mp = datasMP[dt] || {campanhas:['—'], totalClientes: null, receberam: null, setores:[]};
-          var l = leadsPorData[dt] || {total:0, recup:0, setores:[]};
+        h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P por data + campanha</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        for (var di = 0; di < allKeys.length; di++) {
+          var key = allKeys[di];
+          var parts = key.split('|');
+          var dt = parts[0], camp = parts[1];
+          var mp = datasMP[key] || {totalClientes: null, receberam: null, setores:[]};
+          var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
           var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
           var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
-            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + mp.campanhas.join('<br>') + '</td>' +
+            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + camp + '</td>' +
             '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
             '<td class="text-right" style="color:#34d399">' + l.total + '</td>' +
