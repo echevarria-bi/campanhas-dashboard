@@ -207,10 +207,9 @@
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
         var key = mr.dataN + '|' + mr.campanhaM;
-        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: [], campanhasI: []};
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, campanhas: [], setores: []};
         if (datasMP[key].campanhas.indexOf(mr.campanhaM) < 0) datasMP[key].campanhas.push(mr.campanhaM);
         if (mr.setor && datasMP[key].setores.indexOf(mr.setor) < 0) datasMP[key].setores.push(mr.setor);
-        if (mr.campanha && datasMP[key].campanhasI.indexOf(mr.campanha) < 0) datasMP[key].campanhasI.push(mr.campanha);
       }
 
       // Build leadsPorData from rows matching month by data+campanha
@@ -308,10 +307,20 @@
         h += '</div>';
 
         h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P por data + campanha</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        // Build lookup: campaign names per date from lead data
+        var campByDate = {};
+        Object.keys(leadsPorData).forEach(function(k) {
+          var p = k.split('|');
+          var d = p[0], c = p.slice(1).join('|');
+          if (!campByDate[d]) campByDate[d] = [];
+          if (campByDate[d].indexOf(c) < 0) campByDate[d].push(c);
+        });
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
           var parts = key.split('|');
-          var dt = parts[0], camp = parts.length > 1 ? parts[1] : '';
+          var dt = parts[0], camp = parts.length > 1 ? parts.slice(1).join('|') : '';
+          // For M-P-only rows, use lead campaign names for the same date
+          var campDisplay = (leadsPorData[key] ? camp : (campByDate[dt] ? campByDate[dt].join('<br>') : camp));
           var mp = datasMP[key] || {totalClientes: null, receberam: null, setores:[]};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
           var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
@@ -319,7 +328,7 @@
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
-            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + (mp.campanhasI && mp.campanhasI.length ? mp.campanhasI.join('<br>') : camp) + '</td>' +
+            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + campDisplay + '</td>' +
             '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
             '<td class="text-right" style="color:#34d399">' + l.total + '</td>' +
