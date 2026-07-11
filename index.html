@@ -261,8 +261,10 @@
         });
         var funnelMax = Math.max(tCli, tRec, totalLeads, totalRecuperados, 1);
 
+        function funnelW(val) { var p = Math.log(val + 1) / Math.log(tCli + 1) * 100; return Math.max(p, 10); }
+
         function funnelStg(label, valor, pct, color) {
-          var w = Math.max(valor / funnelMax * 100, 12);
+          var w = funnelW(valor);
           var left = (100 - w) / 2;
           return '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:12px">' +
             '<div style="display:flex;align-items:center;justify-content:space-between;width:90%;max-width:380px;margin-bottom:3px">' +
