@@ -312,7 +312,6 @@
           var mp = datasMP[key] || {};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
           var setores = l.setores;
-          var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
           var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
