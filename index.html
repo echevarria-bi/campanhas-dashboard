@@ -306,23 +306,23 @@
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
         h += '<h2 style="margin-bottom:16px">' + icn('funnel',14) + ' Funil de Convers\u00E3o <span class="sub">&rarr; Fluxo geral</span></h2>';
         h += '<div style="padding:6px 0;flex:1;display:flex;flex-direction:column;align-items:center">';
-        var txEntrega = tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0';
-        var txContato = tRec > 0 ? (totalLeads / tRec * 100).toFixed(1) : '0';
-        var txConv = totalLeads > 0 ? (totalRecuperados / totalLeads * 100).toFixed(1) : '0';
-        var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0';
+        var txEntrega = tCli > 0 ? (tRec / tCli * 100).toFixed(2) : '0.00';
+        var txContato = tRec > 0 ? (totalLeads / tRec * 100).toFixed(2) : '0.00';
+        var txConv = totalLeads > 0 ? (totalRecuperados / totalLeads * 100).toFixed(2) : '0.00';
+        var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(2) : '0.00';
         var custoPorContato = totalLeads > 0 ? custoTotal / totalLeads : 0;
         var custoPorReceberam = totalReceberam > 0 ? custoTotal / totalReceberam : 0;
         h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa', null);
         h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa', {tx:txEntrega, desc:'receberam', custo:custoPorReceberam, cor:'#a78bfa'});
         h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#34d399'});
         h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#f59e0b'});
-        var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(1) : '0';
+        var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(2) : '0.00';
         var projRecup = tRec > 0 ? Math.round(tCli * totalRecuperados / tRec) : 0;
         var projFat = tRec > 0 && totalRecuperados > 0 ? tCli * totalValor / tRec : 0;
         h += '<div style="margin-top:6px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;width:100%;font-size:11px">';
-        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(52,211,153,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Recup / Receb</div><div style="font-size:17px;font-weight:800;color:#34d399">' + (tRec > 0 ? (totalRecuperados / tRec * 100).toFixed(1) : '0') + '%</div><div style="color:#6b7280;margin-top:2px;font-size:9px">' + totalRecuperados + ' / ' + tRec.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(251,191,36,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Recup / Total</div><div style="font-size:17px;font-weight:800;color:#fbbf24">' + (tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0') + '%</div><div style="color:#6b7280;margin-top:2px;font-size:9px">' + totalRecuperados + ' / ' + tCli.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(96,165,250,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Taxa Entrega</div><div style="font-size:17px;font-weight:800;color:#60a5fa">' + (tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0') + '%</div><div style="color:#f87171;margin-top:2px;font-size:9px">' + pctNaoAtingidos + '% incorreto</div></div>';
+        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(52,211,153,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Recup / Receb</div><div style="font-size:17px;font-weight:800;color:#34d399">' + (tRec > 0 ? (totalRecuperados / tRec * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:2px;font-size:9px">' + totalRecuperados + ' / ' + tRec.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(251,191,36,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Recup / Total</div><div style="font-size:17px;font-weight:800;color:#fbbf24">' + (tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:2px;font-size:9px">' + totalRecuperados + ' / ' + tCli.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(96,165,250,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Taxa Entrega</div><div style="font-size:17px;font-weight:800;color:#60a5fa">' + (tCli > 0 ? (tRec / tCli * 100).toFixed(2) : '0.00') + '%</div><div style="color:#f87171;margin-top:2px;font-size:9px">' + pctNaoAtingidos + '% incorreto</div></div>';
         h += '<div style="text-align:center;padding:8px 2px;border-radius:8px;background:rgba(245,158,11,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:4px;font-size:9px">Potencial 100%</div><div style="font-size:15px;font-weight:800;color:#f59e0b">' + projRecup.toLocaleString('pt-BR') + ' recup</div><div style="color:#fbbf24;margin-top:2px;font-size:9px;font-weight:600">' + fmtCurr(projFat) + '</div></div>';
         h += '</div></div></div>';
         h += '</div>';
@@ -335,7 +335,7 @@
           var mp = datasMP[key] || {};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
           var setores = l.setores;
-          var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
+          var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(2) : '0.00';
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
@@ -353,7 +353,7 @@
           '<td class="text-right" style="font-weight:700;color:#34d399">' + tL + '</td>' +
           '<td class="text-right" style="font-weight:700;color:#34d399">' + tR + '</td>' +
           '<td class="text-right" style="font-weight:700;color:#fbbf24">' + fmtCurr(tFat) + '</td>' +
-          '<td style="font-weight:700;color:#f59e0b">' + (tL > 0 ? (tR / tL * 100).toFixed(1) : '0.0') + '%</td></tr>';
+          '<td style="font-weight:700;color:#f59e0b">' + (tL > 0 ? (tR / tL * 100).toFixed(2) : '0.00') + '%</td></tr>';
         h += '</tbody></table></div></div>';
       }
 
@@ -371,7 +371,7 @@
         h += '<div class="grid-2">';
         setorKeys.forEach(function(s) {
           var d = setores[s];
-          var pct = d.leads > 0 ? (d.recup / d.leads * 100).toFixed(1) : '0.0';
+          var pct = d.leads > 0 ? (d.recup / d.leads * 100).toFixed(2) : '0.00';
           h += '<div class="chart-box" style="margin-bottom:0">';
           h += '<div style="font-size:13px;font-weight:700;color:#fcd34d;margin-bottom:12px">' + s + '</div>';
           h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
