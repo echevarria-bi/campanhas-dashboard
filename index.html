@@ -296,32 +296,26 @@
         h += '</div></div>';
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
         h += '<h2 style="margin-bottom:16px">' + icn('funnel',14) + ' Funil de Convers\u00E3o <span class="sub">&rarr; Fluxo geral</span></h2>';
-        h += '<div style="padding:10px 0;flex:1;display:flex;flex-direction:column;justify-content:center">';
-        h += funnelBar('Total Clientes', tCli, '100%', '#60a5fa');
-        h += funnelBar('Receberam', tRec, tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0', '#a78bfa');
-        h += funnelBar('Contatos Gerados', totalLeads, tCli > 0 ? (totalLeads / tCli * 100).toFixed(1) : '0', '#34d399');
-        h += funnelBar('Recuperados', totalRecuperados, tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0', '#f59e0b');
-        h += '</div></div>';
-        h += '</div>';
-
-        // Conversion funnel KPIs
+        h += '<div style="padding:10px 0;flex:1;display:flex;flex-direction:column">';
         var txEntrega = tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0';
         var txContato = tRec > 0 ? (totalLeads / tRec * 100).toFixed(1) : '0';
         var txConv = totalLeads > 0 ? (totalRecuperados / totalLeads * 100).toFixed(1) : '0';
         var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0';
-        h += '<div class="chart-box" style="margin-top:14px;padding:20px 16px">';
-        h += '<h2 style="margin-bottom:16px">' + icn('trending-up',14) + " KPIs de Convers\u00E3o <span class=\"sub\">&rarr; Taxas entre est\u00E1gios do funil</span></h2>";
-        h += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:center">';
-        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Total Clientes</div><div style="font-size:20px;font-weight:800;color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#a78bfa">' + txEntrega + '%</span></div>';
-        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Receberam</div><div style="font-size:20px;font-weight:800;color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#34d399">' + txContato + '%</span></div>';
-        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Contatos</div><div style="font-size:20px;font-weight:800;color:#34d399">' + totalLeads.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#f59e0b">' + txConv + '%</span></div>';
-        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Recuperados</div><div style="font-size:20px;font-weight:800;color:#f59e0b">' + totalRecuperados.toLocaleString('pt-BR') + '</div></div>';
-        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#fbbf24">' + txGlobal + '%</span></div>';
-        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Global</div><div style="font-size:20px;font-weight:800;color:#fbbf24">' + txGlobal + '%</div></div>';
-        h += '</div></div>';
+        var custoPorContato = totalLeads > 0 ? custoTotal / totalLeads : 0;
+        h += funnelBar('Total Clientes', tCli, '100%', '#60a5fa');
+        h += '<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:3px 0"><span style="color:#a78bfa;font-size:14px;font-weight:700">' + txEntrega + '%</span><span style="color:#6b7280;font-size:10px">receberam</span><span style="color:#6b7280;font-size:10px;background:rgba(248,113,113,0.15);padding:2px 8px;border-radius:4px;color:#f87171;font-weight:600">' + fmtCurr(custoTotal) + '</span></div>';
+        h += funnelBar('Receberam', tRec, txEntrega + '%', '#a78bfa');
+        h += '<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:3px 0"><span style="color:#34d399;font-size:14px;font-weight:700">' + txContato + '%</span><span style="color:#6b7280;font-size:10px">geraram contato</span><span style="color:#6b7280;font-size:10px;background:rgba(167,139,250,0.15);padding:2px 8px;border-radius:4px;color:#a78bfa;font-weight:600">' + fmtCurr(custoPorContato) + '/ctt</span></div>';
+        h += funnelBar('Contatos Gerados', totalLeads, txContato + '%', '#34d399');
+        h += '<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:3px 0"><span style="color:#f59e0b;font-size:14px;font-weight:700">' + txConv + '%</span><span style="color:#6b7280;font-size:10px">convertidos</span><span style="color:#6b7280;font-size:10px;background:rgba(245,158,11,0.15);padding:2px 8px;border-radius:4px;color:#f59e0b;font-weight:600">' + fmtCurr(custoPorRecuperado) + '/rec</span></div>';
+        h += funnelBar('Recuperados', totalRecuperados, txConv + '%', '#f59e0b');
+        h += '<div style="margin-top:8px;padding-top:10px;border-top:1px solid #1e1b4b;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px">';
+        h += '<div style="text-align:center;padding:6px 4px;border-radius:6px;background:rgba(255,255,255,0.03)"><div style="font-size:9px;color:#6b7280;text-transform:uppercase">Envio</div><div style="font-size:14px;font-weight:800;color:#f87171">' + fmtCurr(custoTotal) + '</div></div>';
+        h += '<div style="text-align:center;padding:6px 4px;border-radius:6px;background:rgba(255,255,255,0.03)"><div style="font-size:9px;color:#6b7280;text-transform:uppercase">Custo/Contato</div><div style="font-size:14px;font-weight:800;color:#a78bfa">' + fmtCurr(custoPorContato) + '</div></div>';
+        h += '<div style="text-align:center;padding:6px 4px;border-radius:6px;background:rgba(255,255,255,0.03)"><div style="font-size:9px;color:#6b7280;text-transform:uppercase">Custo/Recup</div><div style="font-size:14px;font-weight:800;color:#f59e0b">' + fmtCurr(custoPorRecuperado) + '</div></div>';
+        h += '<div style="text-align:center;padding:6px 4px;border-radius:6px;background:rgba(255,255,255,0.03)"><div style="font-size:9px;color:#6b7280;text-transform:uppercase">Conv. Global</div><div style="font-size:14px;font-weight:800;color:#fbbf24">' + txGlobal + '%</div></div>';
+        h += '</div></div></div>';
+        h += '</div>';
 
         h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P vs Leads por data + campanha</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
         for (var di = 0; di < allKeys.length; di++) {
