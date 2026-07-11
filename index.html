@@ -114,7 +114,7 @@
       var rows = [];
       for (var ri = 1; ri < raw.length; ri++) {
         var r = raw[ri];
-        if (!r || !r[0]) continue;
+        if (!r || !r[0] || !r[4]) continue;
         rows.push({
           id: r[0],
           resposta: r[1],
