@@ -312,9 +312,9 @@
         var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0';
         var custoPorContato = totalLeads > 0 ? custoTotal / totalLeads : 0;
         var custoPorReceberam = totalReceberam > 0 ? custoTotal / totalReceberam : 0;
-        h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa', {tx:txEntrega, desc:'receberam', custo:custoPorReceberam, cor:'#a78bfa'});
-        h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#34d399'});
-        h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#f59e0b'});
+        h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa', {tx:txEntrega, desc:'receberam', custo:custoPorReceberam, cor:'#60a5fa'});
+        h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#a78bfa'});
+        h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#34d399'});
         h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b', null);
         var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(1) : '0';
         var projRecup = tRec > 0 ? Math.round(tCli * totalRecuperados / tRec) : 0;
