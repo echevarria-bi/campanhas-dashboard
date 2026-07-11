@@ -327,7 +327,7 @@
         h += '</div></div></div>';
         h += '</div>';
 
-        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento</span></h2><div class="table-wrap"><table><thead><tr><th>#</th><th>Campanha</th><th>Setores</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento</span></h2><div class="table-wrap"><table><thead><tr><th>Ranking</th><th>Campanha</th><th>Setores</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
         var campRank = {};
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
@@ -348,9 +348,13 @@
           var sList = Object.keys(c.setores).sort();
           var pct = c.leads > 0 ? (c.recup / c.leads * 100).toFixed(2) : '0.00';
           var bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
-          var medal = i === 0 ? '<span style="color:#fbbf24">&#9733;</span> ' : (i < 3 ? '<span style="color:#9ca3af">&#9733;</span> ' : (i+1) + '.');
+          var rankHtml = '';
+          if (i === 0) rankHtml = '<span style="font-size:16px">\uD83E\uDD47</span>';
+          else if (i === 1) rankHtml = '<span style="font-size:16px">\uD83E\uDD48</span>';
+          else if (i === 2) rankHtml = '<span style="font-size:16px">\uD83E\uDD49</span>';
+          else rankHtml = '<span style="font-size:13px;font-weight:700;color:#6b7280">' + (i+1) + '</span>';
           h += '<tr style="background:' + bg + '">' +
-            '<td style="font-size:11px;font-weight:700;color:' + (i===0?'#fbbf24':i<3?'#9ca3af':'#6b7280') + '">' + medal + '</td>' +
+            '<td style="text-align:center">' + rankHtml + '</td>' +
             '<td style="font-size:11px;color:#fcd34d;font-weight:600;max-width:250px">' + c.campanha + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:180px">' + (sList.length ? sList.join('<br>') : '—') + '</td>' +
             '<td class="text-right" style="color:#60a5fa;font-size:12px">' + (c.tCli || '—') + '</td>' +
