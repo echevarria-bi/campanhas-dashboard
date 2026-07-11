@@ -200,36 +200,33 @@
 
       var filtered = dados;
 
-      // Build datasMP grouped by dataN
+      // Build datasMP grouped by dataN+campanhaM
       var datasMP = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
-        if (!datasMP[mr.dataN]) datasMP[mr.dataN] = {totalClientes: mr.totalClientes, receberam: mr.receberam};
+        var key = mr.dataN + '|' + mr.campanhaM;
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam};
       }
 
-      // Build leadsPorData grouped by data
+      // Build leadsPorData grouped by data+campanha
       var leadsPorData = {};
-      var campanhasPorData = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
-        if (!mr.data) continue;
+        if (!mr.data || !mr.campanha) continue;
         if (!matchMonth(mr.data, monthNum)) continue;
-        if (!leadsPorData[mr.data]) leadsPorData[mr.data] = {total:0, recup:0, faturamento:0, setores:[]};
-        leadsPorData[mr.data].total++;
-        if (mr.valor > 0) { leadsPorData[mr.data].recup++; leadsPorData[mr.data].faturamento += mr.valor; }
-        if (mr.setor && leadsPorData[mr.data].setores.indexOf(mr.setor) < 0) leadsPorData[mr.data].setores.push(mr.setor);
-        if (mr.campanha) {
-          if (!campanhasPorData[mr.data]) campanhasPorData[mr.data] = [];
-          if (campanhasPorData[mr.data].indexOf(mr.campanha) < 0) campanhasPorData[mr.data].push(mr.campanha);
-        }
+        var key = mr.data + '|' + mr.campanha;
+        if (!leadsPorData[key]) leadsPorData[key] = {total:0, recup:0, faturamento:0, setores:[]};
+        leadsPorData[key].total++;
+        if (mr.valor > 0) { leadsPorData[key].recup++; leadsPorData[key].faturamento += mr.valor; }
+        if (mr.setor && leadsPorData[key].setores.indexOf(mr.setor) < 0) leadsPorData[key].setores.push(mr.setor);
       }
 
       // Cards use lead data for the month
       var totalLeads = 0, totalValor = 0, totalRecuperados = 0;
-      Object.keys(leadsPorData).forEach(function(d) {
-        var l = leadsPorData[d];
+      Object.keys(leadsPorData).forEach(function(k) {
+        var l = leadsPorData[k];
         totalLeads += l.total;
         totalRecuperados += l.recup;
         totalValor += l.faturamento;
@@ -240,21 +237,22 @@
       h += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
       h += '</div>';
 
-      // allDates = union of M-P and lead dates
-      var allDates = Object.keys(datasMP);
-      Object.keys(leadsPorData).forEach(function(d) {
-        if (allDates.indexOf(d) < 0) allDates.push(d);
+      // allKeys = union of M-P and lead compound keys
+      var allKeys = Object.keys(datasMP);
+      Object.keys(leadsPorData).forEach(function(k) {
+        if (allKeys.indexOf(k) < 0) allKeys.push(k);
       });
-      allDates.sort(function(a,b) {
-        var pa = a.split('/'), pb = b.split('/');
-        return pa[2]-pb[2] || pa[1]-pb[1] || pa[0]-pb[0];
+      allKeys.sort(function(a,b) {
+        var pa = a.split('|'), pb = b.split('|');
+        var da = pa[0].split('/'), db = pb[0].split('/');
+        return da[2]-db[2] || da[1]-db[1] || da[0]-db[0] || (pa[1] < pb[1] ? -1 : pa[1] > pb[1] ? 1 : 0);
       });
 
-      if (allDates.length) {
+      if (allKeys.length) {
         var tCli = 0, tRec = 0, tL = 0, tR = 0, tFat = 0;
-        allDates.forEach(function(dt) {
-          var mp = datasMP[dt] || {};
-          var l = leadsPorData[dt] || {};
+        allKeys.forEach(function(k) {
+          var mp = datasMP[k] || {};
+          var l = leadsPorData[k] || {};
           tCli += parseFloat(mp.totalClientes) || 0;
           tRec += parseFloat(mp.receberam) || 0;
           tL += l.total || 0;
@@ -306,19 +304,20 @@
         h += '</div></div>';
         h += '</div>';
 
-        h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados agrupados por data</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
-        for (var di = 0; di < allDates.length; di++) {
-          var dt = allDates[di];
-          var mp = datasMP[dt] || {};
-          var l = leadsPorData[dt] || {total:0, recup:0, faturamento:0, setores:[]};
-          var camps = campanhasPorData[dt] || [];
-          var setores = (mp.setores||[]).concat(l.setores.filter(function(s){return (mp.setores||[]).indexOf(s)<0;}));
+        h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P vs Leads por data + campanha</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        for (var di = 0; di < allKeys.length; di++) {
+          var key = allKeys[di];
+          var parts = key.split('|');
+          var dt = parts[0], camp = parts.length > 1 ? parts.slice(1).join('|') : '';
+          var mp = datasMP[key] || {};
+          var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
+          var setores = l.setores;
           var setores = mp.setores.concat(l.setores.filter(function(s){return mp.setores.indexOf(s)<0;}));
           var pct = l.total > 0 ? (l.recup / l.total * 100).toFixed(1) : '0.0';
           h += '<tr>' +
             '<td style="font-weight:600">' + dt + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:200px">' + (setores.length ? setores.join('<br>') : '—') + '</td>' +
-            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + (camps.length ? camps.join('<br>') : '—') + '</td>' +
+            '<td style="font-size:10px;color:#fcd34d;max-width:250px">' + camp + '</td>' +
             '<td class="text-right" style="color:#60a5fa">' + (mp.totalClientes != null && mp.totalClientes !== '' ? mp.totalClientes : '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa">' + (mp.receberam != null && mp.receberam !== '' ? mp.receberam : '—') + '</td>' +
             '<td class="text-right" style="color:#34d399">' + l.total + '</td>' +
