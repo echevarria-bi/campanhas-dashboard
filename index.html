@@ -263,24 +263,23 @@
 
         function funnelW(val) { var p = Math.log(val + 1) / Math.log(tCli + 1) * 100; return Math.max(p, 10); }
 
-        function funnelStg(label, valor, pct, color) {
+        function funnelStg(label, valor, pct, color, conn) {
           var w = funnelW(valor);
-          return '<div style="display:flex;flex-direction:column;align-items:center;width:100%;margin-bottom:12px">' +
-            '<div style="display:flex;align-items:center;justify-content:space-between;width:' + w + '%;min-width:120px;margin-bottom:3px">' +
-            '<span style="font-size:12px;color:#d1d5db;font-weight:600;text-transform:uppercase;letter-spacing:0.3px">' + label + '</span>' +
-            '<span style="font-size:11px;color:' + color + ';font-weight:700">' + pct + '</span>' +
-            '</div>' +
-            '<div style="width:' + w + '%;min-width:120px;height:46px;border-radius:10px;background:linear-gradient(90deg,' + color + ' 0%,' + color + 'cc 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px ' + color + '44,inset 0 1px 0 ' + color + '66">' +
-            '<span style="font-size:17px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5)">' + (typeof valor === 'number' ? valor.toLocaleString('pt-BR') : valor) + '</span>' +
-            '</div></div>';
-        }
-
-        function funnelConn(tx, desc, custo, cor) {
-          return '<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 0 4px 0">' +
-            '<span style="font-size:13px;color:#6b7280">' + desc + '</span>' +
-            '<span style="font-size:11px;font-weight:700;color:' + cor + ';background:rgba(255,255,255,0.06);padding:1px 10px;border-radius:8px">' + tx + '%</span>' +
-            '<span style="font-size:11px;font-weight:600;color:' + cor + '">' + fmtCurr(custo) + '</span>' +
-            '</div>';
+          var h = '<div style="display:flex;flex-direction:column;align-items:center;width:100%;margin-bottom:10px">';
+          h += '<div style="font-size:12px;color:#d1d5db;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px">' + label + '</div>';
+          h += '<div style="width:' + w + '%;min-width:100px;height:46px;border-radius:10px;background:linear-gradient(90deg,' + color + ' 0%,' + color + 'cc 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px ' + color + '44,inset 0 1px 0 ' + color + '66">';
+          h += '<span style="font-size:17px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5)">' + (typeof valor === 'number' ? valor.toLocaleString('pt-BR') : valor) + '</span>';
+          h += '</div>';
+          h += '<div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px">';
+          h += '<span style="font-size:10px;font-weight:600;color:' + color + '">' + pct + '</span>';
+          if (conn) {
+            h += '<span style="font-size:10px;color:#4b5563">\u00B7</span>';
+            h += '<span style="font-size:10px;color:#6b7280">' + conn.desc + '</span>';
+            h += '<span style="font-size:10px;font-weight:700;color:' + conn.cor + '">' + conn.tx + '%</span>';
+            h += '<span style="font-size:10px;font-weight:600;color:' + conn.cor + '">' + fmtCurr(conn.custo) + '</span>';
+          }
+          h += '</div></div>';
+          return h;
         }
 
         var custoPorMsg = 0.54;
@@ -313,13 +312,10 @@
         var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0';
         var custoPorContato = totalLeads > 0 ? custoTotal / totalLeads : 0;
         var custoPorReceberam = totalReceberam > 0 ? custoTotal / totalReceberam : 0;
-        h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa');
-        h += funnelConn(txEntrega, 'receberam', custoPorReceberam, '#a78bfa');
-        h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa');
-        h += funnelConn(txContato, 'geraram contato', custoPorContato, '#34d399');
-        h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399');
-        h += funnelConn(txConv, 'convertidos', custoPorRecuperado, '#f59e0b');
-        h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b');
+        h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa', {tx:txEntrega, desc:'receberam', custo:custoPorReceberam, cor:'#a78bfa'});
+        h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#34d399'});
+        h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#f59e0b'});
+        h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b', null);
         var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(1) : '0';
         var projRecup = tRec > 0 ? Math.round(tCli * totalRecuperados / tRec) : 0;
         var projFat = tRec > 0 && totalRecuperados > 0 ? tCli * totalValor / tRec : 0;
