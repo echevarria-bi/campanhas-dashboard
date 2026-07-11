@@ -304,6 +304,25 @@
         h += '</div></div>';
         h += '</div>';
 
+        // Conversion funnel KPIs
+        var txEntrega = tCli > 0 ? (tRec / tCli * 100).toFixed(1) : '0';
+        var txContato = tRec > 0 ? (totalLeads / tRec * 100).toFixed(1) : '0';
+        var txConv = totalLeads > 0 ? (totalRecuperados / totalLeads * 100).toFixed(1) : '0';
+        var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(1) : '0';
+        h += '<div class="chart-box" style="margin-top:14px;padding:20px 16px">';
+        h += '<h2 style="margin-bottom:16px">' + icn('trending-up',14) + " KPIs de Convers\u00E3o <span class=\"sub\">&rarr; Taxas entre est\u00E1gios do funil</span></h2>";
+        h += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:center">';
+        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Total Clientes</div><div style="font-size:20px;font-weight:800;color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#a78bfa">' + txEntrega + '%</span></div>';
+        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Receberam</div><div style="font-size:20px;font-weight:800;color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#34d399">' + txContato + '%</span></div>';
+        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Contatos</div><div style="font-size:20px;font-weight:800;color:#34d399">' + totalLeads.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#f59e0b">' + txConv + '%</span></div>';
+        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Recuperados</div><div style="font-size:20px;font-weight:800;color:#f59e0b">' + totalRecuperados.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;font-size:22px;color:#4b5563">&rarr; <span style="font-size:13px;font-weight:700;color:#fbbf24">' + txGlobal + '%</span></div>';
+        h += '<div style="text-align:center"><div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Global</div><div style="font-size:20px;font-weight:800;color:#fbbf24">' + txGlobal + '%</div></div>';
+        h += '</div></div>';
+
         h += '<div class="chart-box"><h2>Matriz Campanhas <span class="sub">&rarr; Dados M-P vs Leads por data + campanha</span></h2><div class="table-wrap"><table><thead><tr><th>Data do Disparo</th><th>Setor</th><th>Campanha</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos Gerados</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
