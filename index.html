@@ -65,7 +65,7 @@
       <div class="upload-area" id="areaInicial" ondragover="this.classList.add('dragover');event.preventDefault()" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');if(event.dataTransfer.files[0])processFile(event.dataTransfer.files[0])">
         <div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div>
         <div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div>
-        <div style="font-size:13px;color:#4a4d6e;margin-top:4px">base_campanhas.xlsx</div>
+        <div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>
       </div>
     </div>
   </div>
@@ -73,36 +73,76 @@
   <footer id="footer" style="display:none"></footer>
 
   <script>
-    var _dados = null, _activeTab = 'geral';
+    var _dados = null, _activeTab = 'geral', _campInfo = {};
+
+    function limparNome(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '');
+    }
+    function gerarSlug(dataStr, nomeCamp) {
+      var ds = dataStr.replace(/\//g, '');
+      var partes = nomeCamp.split('|');
+      var nome = partes[0].replace('CAMPANHA ','').trim();
+      var setor = partes.length >= 3 ? partes[partes.length-1].trim() : '';
+      var sAbr = {TELEVENDAS:'TV', REPRESENTANTES:'RP', ATIVOS:'AT', EXTERNO:'EX', PERDIDO:'PD', 'PRÉ VENDAS':'PV'};
+      var sa = sAbr[setor.toUpperCase()] || limparNome(setor).substring(0,2).toUpperCase();
+      var curto = limparNome(nome).substring(0,10);
+      var diasMatch = nomeCamp.match(/(\d+)\s*[-–]\s*(\d+)/);
+      var slug = ds + '_' + curto + '_' + sa;
+      if (diasMatch) slug += '_' + diasMatch[1] + '_' + diasMatch[2];
+      if (slug.length > 31) slug = slug.substring(0, 31).replace(/_+$/, '');
+      return slug;
+    }
+    function toggleCampanha(slug) {
+      var el = document.getElementById('det-' + slug);
+      if (!el) return;
+      el.style.display = (el.style.display === 'none' || !el.style.display) ? 'table-row' : 'none';
+    }
+
+    function processBuffer(buf, nome) {
+      try {
+        var data = new Uint8Array(buf);
+        var wb = XLSX.read(data, {type:'array'});
+        _dados = parseCampanhas(wb);
+        renderCampanhas();
+        document.getElementById('areaInicial').parentElement.style.display = 'none';
+        document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
+        var now = new Date();
+        document.getElementById('footer').style.display = 'block';
+        document.getElementById('footer').innerHTML = '<strong>' + nome + '</strong> &middot; ' + now.toLocaleDateString('pt-BR') + ' &agrave;s ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+        document.getElementById('statusFile').textContent = 'Carregado';
+        document.getElementById('statusFile').style.color = '#34d399';
+        setTimeout(function() { document.getElementById('statusFile').textContent = ''; }, 3000);
+      } catch(err) {
+        document.getElementById('areaInicial').innerHTML = '<div style="font-size:40px;margin-bottom:8px">&#9888;</div><div style="color:#f87171;font-size:14px">Erro: ' + err.message + '</div><div style="color:#4a4d6e;font-size:12px;margin-top:4px;cursor:pointer" onclick="document.getElementById(\'inputArquivo\').click()">Clique para tentar novamente</div>';
+      }
+    }
 
     function processFile(file) {
       if (!file) return;
       document.getElementById('areaInicial').innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Processando ' + file.name + '...</div>';
       var reader = new FileReader();
-      reader.onload = function(ev) {
-        try {
-          var data = new Uint8Array(ev.target.result);
-          var wb = XLSX.read(data, {type:'array'});
-          _dados = parseCampanhas(wb);
-          renderCampanhas();
-          document.getElementById('areaInicial').parentElement.style.display = 'none';
-          document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
-          var now = new Date();
-          document.getElementById('footer').style.display = 'block';
-          document.getElementById('footer').innerHTML = '<strong>' + file.name + '</strong> &middot; ' + now.toLocaleDateString('pt-BR') + ' &agrave;s ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-          document.getElementById('statusFile').textContent = 'Carregado';
-          document.getElementById('statusFile').style.color = '#34d399';
-          setTimeout(function() { document.getElementById('statusFile').textContent = ''; }, 3000);
-        } catch(err) {
-          document.getElementById('areaInicial').innerHTML = '<div style="font-size:40px;margin-bottom:8px">&#9888;</div><div style="color:#f87171;font-size:14px">Erro: ' + err.message + '</div><div style="color:#4a4d6e;font-size:12px;margin-top:4px;cursor:pointer" onclick="document.getElementById(\'inputArquivo\').click()">Clique para tentar novamente</div>';
-        }
-      };
+      reader.onload = function(ev) { processBuffer(ev.target.result, file.name); };
       reader.readAsArrayBuffer(file);
     }
 
+    function autoLoad() {
+      var area = document.getElementById('areaInicial');
+      area.innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Carregando base_campanhas.xlsx...</div>';
+      fetch('RELATÓRIO - CAMPANHAS.xlsx').then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.arrayBuffer();
+      }).then(function(buf) {
+        processBuffer(buf, 'RELATÓRIO - CAMPANHAS.xlsx');
+      }).catch(function() {
+        area.innerHTML = '<div style="font-size:40px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>';
+      });
+    }
+
+    autoLoad();
+
     function novoArquivo() {
       document.getElementById('areaInicial').parentElement.style.display = 'block';
-      document.getElementById('areaInicial').innerHTML = '<div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">base_campanhas.xlsx</div>';
+      document.getElementById('areaInicial').innerHTML = '<div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>';
       document.getElementById('dashContent').innerHTML = '';
       document.getElementById('footer').style.display = 'none';
       document.getElementById('btnNovoArquivo').style.display = 'none';
@@ -110,7 +150,22 @@
     }
 
     function parseCampanhas(wb) {
-      var raw = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, defval:''});
+      // Read campaign info from per-campaign sheets
+      _campInfo = {};
+      wb.SheetNames.forEach(function(s) {
+        if (s === 'Dados Geral' || s === 'Resumo por RCA' || s === 'Planilha1') return;
+        var cws = wb.Sheets[s];
+        var crows = XLSX.utils.sheet_to_json(cws, {header:1, defval:''});
+        _campInfo[s] = {
+          texto: (crows[4] && crows[4][0]) ? String(crows[4][0]).trim() : '',
+          publico: (crows[8] && crows[8][0]) ? String(crows[8][0]).trim() : ''
+        };
+      });
+
+      // Read main data from Dados Geral sheet
+      var ws = wb.Sheets['Dados Geral'];
+      if (!ws) throw new Error('Aba "Dados Geral" não encontrada no arquivo.');
+      var raw = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
       var rows = [];
       for (var ri = 1; ri < raw.length; ri++) {
         var r = raw[ri];
@@ -123,13 +178,14 @@
           setor: r[4],
           regiao: r[5],
           supervisor: r[6],
-          data: typeof r[7] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[7]) : r[7],
-          campanha: r[8],
-          valor: parseFloat(r[9]) || 0,
-          campanhaM: r[11],
-          dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : r[12],
-          totalClientes: r[13],
-          receberam: r[14]
+          campanha: r[7],
+          data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : r[8],
+          compra: r[9],
+          valor: parseFloat(r[10]) || 0,
+          campanhaM: r[13],
+          dataN: typeof r[14] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[14]) : r[14],
+          totalClientes: r[15],
+          receberam: r[16]
         });
       }
       return rows;
@@ -207,7 +263,7 @@
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
         var key = mr.dataN + '|' + mr.campanhaM;
-        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam};
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, slug: gerarSlug(mr.dataN, mr.campanhaM)};
       }
 
       // Build leadsPorData grouped by data+campanha
@@ -327,7 +383,7 @@
         h += '</div></div></div>';
         h += '</div>';
 
-        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento</span></h2><div class="table-wrap"><table><thead><tr><th style="text-align:center">Ranking</th><th>Campanha</th><th>Setores</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento (clique na campanha para detalhes)</span></h2><div class="table-wrap"><table><thead><tr><th style="text-align:center">Ranking</th><th>Campanha</th><th>Setores</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
         var campRank = {};
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
@@ -335,13 +391,14 @@
           var camp = parts.length > 1 ? parts.slice(1).join('|') : '(sem campanha)';
           var mp = datasMP[key] || {};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
-          if (!campRank[camp]) campRank[camp] = {campanha:camp, tCli:0, tRec:0, leads:0, recup:0, fat:0, setores:{}};
+          if (!campRank[camp]) campRank[camp] = {campanha:camp, tCli:0, tRec:0, leads:0, recup:0, fat:0, setores:{}, slug:''};
           campRank[camp].tCli += parseFloat(mp.totalClientes) || 0;
           campRank[camp].tRec += parseFloat(mp.receberam) || 0;
           campRank[camp].leads += l.total || 0;
           campRank[camp].recup += l.recup || 0;
           campRank[camp].fat += l.faturamento || 0;
           (l.setores||[]).forEach(function(s){ campRank[camp].setores[s]=true; });
+          if (mp.slug && !campRank[camp].slug) campRank[camp].slug = mp.slug;
         }
         var campArr = Object.keys(campRank).map(function(c){return campRank[c];}).sort(function(a,b){return b.fat - a.fat;});
         campArr.forEach(function(c, i) {
@@ -353,7 +410,8 @@
           else if (i === 1) rankHtml = '<span style="font-size:16px">\uD83E\uDD48</span>';
           else if (i === 2) rankHtml = '<span style="font-size:16px">\uD83E\uDD49</span>';
           else rankHtml = '<span style="font-size:13px;font-weight:700;color:#6b7280">' + (i+1) + '</span>';
-          h += '<tr style="background:' + bg + '">' +
+          var campSafe = (c.slug || '').replace(/'/g, '');
+          h += '<tr style="cursor:pointer;background:' + bg + '" onclick="toggleCampanha(\'' + campSafe + '\')">' +
             '<td style="text-align:center">' + rankHtml + '</td>' +
             '<td style="font-size:11px;color:#fcd34d;font-weight:600;max-width:250px">' + c.campanha + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:180px">' + (sList.length ? sList.join('<br>') : '—') + '</td>' +
@@ -363,6 +421,19 @@
             '<td class="text-right" style="color:#34d399;font-size:12px">' + c.recup + '</td>' +
             '<td class="text-right" style="color:#fbbf24;font-size:12px;font-weight:700">' + fmtCurr(c.fat) + '</td>' +
             '<td style="color:#f59e0b;font-size:12px">' + pct + '%</td></tr>';
+          // Detail row (hidden)
+          h += '<tr id="det-' + campSafe + '" style="display:none"><td colspan="9" style="padding:16px;background:#0f1119;border-bottom:1px solid #1e1b4b">';
+          var info = _campInfo[c.slug] || {};
+          var imgPath = 'artes/' + c.slug + '.png';
+          h += '<div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">';
+          if (info.texto || info.publico) {
+            h += '<div style="flex:2;min-width:250px">';
+            if (info.texto) h += '<div style="margin-bottom:12px"><div style="font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.5px;margin-bottom:4px">Texto do Disparo</div><div style="font-size:13px;color:#d1d5db;line-height:1.6;padding:12px;background:#11131c;border-radius:8px;border:1px solid #1e1b4b">' + info.texto + '</div></div>';
+            if (info.publico) h += '<div><div style="font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.5px;margin-bottom:4px">Público-Alvo</div><div style="font-size:13px;color:#d1d5db;line-height:1.6;padding:12px;background:#11131c;border-radius:8px;border:1px solid #1e1b4b">' + info.publico.replace(/\n/g,'<br>') + '</div></div>';
+            h += '</div>';
+          }
+          h += '<div style="flex:0 0 auto"><img src="' + imgPath + '" style="max-height:130px;max-width:200px;border-radius:8px;border:1px solid #1e1b4b" onerror="this.style.display=\'none\'"></div>';
+          h += '</div></td></tr>';
         });
         h += '<tr class="tot-row"><td></td><td style="font-weight:700">Total</td><td></td>' +
           '<td class="text-right" style="font-weight:700">' + tCli + '</td>' +
