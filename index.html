@@ -388,20 +388,19 @@
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
           var parts = key.split('|');
+          var dataDisp = parts[0];
           var camp = parts.length > 1 ? parts.slice(1).join('|') : '(sem campanha)';
           var mp = datasMP[key] || {};
           var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
-          if (!campRank[camp]) campRank[camp] = {campanha:camp, tCli:0, tRec:0, leads:0, recup:0, fat:0, setores:{}, slug:'', datas:{}};
-          campRank[camp].tCli += parseFloat(mp.totalClientes) || 0;
-          campRank[camp].tRec += parseFloat(mp.receberam) || 0;
-          campRank[camp].leads += l.total || 0;
-          campRank[camp].recup += l.recup || 0;
-          campRank[camp].fat += l.faturamento || 0;
-          (l.setores||[]).forEach(function(s){ campRank[camp].setores[s]=true; });
-          campRank[camp].datas[parts[0]] = true;
-          if (mp.slug && !campRank[camp].slug) campRank[camp].slug = mp.slug;
+          if (!campRank[key]) campRank[key] = {campanha:camp, data:dataDisp, tCli:0, tRec:0, leads:0, recup:0, fat:0, setores:{}, slug:mp.slug||''};
+          campRank[key].tCli += parseFloat(mp.totalClientes) || 0;
+          campRank[key].tRec += parseFloat(mp.receberam) || 0;
+          campRank[key].leads += l.total || 0;
+          campRank[key].recup += l.recup || 0;
+          campRank[key].fat += l.faturamento || 0;
+          (l.setores||[]).forEach(function(s){ campRank[key].setores[s]=true; });
         }
-        var campArr = Object.keys(campRank).map(function(c){return campRank[c];}).sort(function(a,b){return b.fat - a.fat;});
+        var campArr = Object.keys(campRank).map(function(k){return campRank[k];}).sort(function(a,b){return b.fat - a.fat;});
         campArr.forEach(function(c, i) {
           var sList = Object.keys(c.setores).sort();
           var pct = c.leads > 0 ? (c.recup / c.leads * 100).toFixed(2) : '0.00';
@@ -412,11 +411,10 @@
           else if (i === 2) rankHtml = '<span style="font-size:16px">\uD83E\uDD49</span>';
           else rankHtml = '<span style="font-size:13px;font-weight:700;color:#6b7280">' + (i+1) + '</span>';
           var campSafe = (c.slug || '').replace(/'/g, '');
-          var datasList = Object.keys(c.datas).sort(function(a,b){var pa=a.split('/'),pb=b.split('/');return pa[2]-pb[2]||pa[1]-pb[1]||pa[0]-pb[0];});
           h += '<tr style="cursor:pointer;background:' + bg + '" onclick="toggleCampanha(\'' + campSafe + '\')">' +
             '<td style="text-align:center">' + rankHtml + '</td>' +
             '<td style="font-size:11px;color:#fcd34d;font-weight:600;max-width:250px">' + c.campanha + '</td>' +
-            '<td style="font-size:10px;color:#93c5fd">' + datasList.join('<br>') + '</td>' +
+            '<td style="font-size:10px;color:#93c5fd">' + c.data + '</td>' +
             '<td style="font-size:10px;color:#93c5fd;max-width:180px">' + (sList.length ? sList.join('<br>') : '—') + '</td>' +
             '<td class="text-right" style="color:#60a5fa;font-size:12px">' + (c.tCli || '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa;font-size:12px">' + (c.tRec || '—') + '</td>' +
