@@ -277,10 +277,10 @@
           data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : String(r[8]).trim(),
           compra: r[9],
           valor: parseFloat(r[10]) || 0,
-          campanhaM: String(r[13]).trim(),
-          dataN: typeof r[14] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[14]) : String(r[14]).trim(),
-          totalClientes: r[15],
-          receberam: r[16]
+          campanhaM: String(r[12]).trim(),
+          dataN: typeof r[13] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[13]) : String(r[13]).trim(),
+          totalClientes: r[14],
+          receberam: r[15]
         });
       }
       return rows;
