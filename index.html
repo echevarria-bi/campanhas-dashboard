@@ -574,26 +574,26 @@
         h += '</tbody></table></div></div>';
         h += '<div class="chart-box">' +
           '<h2>' + icn('lightbulb',14) + ' Curiosidade <span class="sub">&rarr; Se todos os clientes tivessem recebido a mensagem</span></h2>' +
-          '<div style="padding:16px;border-radius:8px;background:rgba(245,158,11,0.06)">' +
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
-            '<div style="padding:10px;border-radius:6px;background:rgba(0,0,0,0.15)">' +
-              '<div style="color:#6b7280;font-size:11px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px">Agora (parcial)</div>' +
-              '<div style="font-size:12px;color:#9ca3af;line-height:1.8">' +
+          '<div style="padding:20px;border-radius:8px;background:rgba(245,158,11,0.06)">' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">' +
+            '<div style="padding:14px;border-radius:6px;background:rgba(0,0,0,0.15)">' +
+              '<div style="color:#6b7280;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:8px">Agora (parcial)</div>' +
+              '<div style="font-size:15px;color:#9ca3af;line-height:2">' +
                 '<span style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</span> receberam<br>' +
-                '\u2192 <span style="color:#34d399">' + totalRecuperados + '</span> recuperados<br>' +
-                '\u2192 <span style="color:#fbbf24">' + fmtCurr(totalValor) + '</span>' +
+                '\u2192 <span style="color:#34d399;font-size:17px;font-weight:600">' + totalRecuperados + '</span> recuperados<br>' +
+                '\u2192 <span style="color:#fbbf24;font-size:17px;font-weight:600">' + fmtCurr(totalValor) + '</span>' +
               '</div>' +
             '</div>' +
-            '<div style="padding:10px;border-radius:6px;background:rgba(0,0,0,0.15)">' +
-              '<div style="color:#f59e0b;font-size:11px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px">Proje\u00E7\u00E3o (100%)</div>' +
-              '<div style="font-size:12px;color:#9ca3af;line-height:1.8">' +
+            '<div style="padding:14px;border-radius:6px;background:rgba(0,0,0,0.15)">' +
+              '<div style="color:#f59e0b;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:8px">Proje\u00E7\u00E3o (100%)</div>' +
+              '<div style="font-size:15px;color:#9ca3af;line-height:2">' +
                 '<span style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</span> receberiam<br>' +
-                '\u2192 <span style="color:#34d399;font-weight:700">' + projRecup.toLocaleString('pt-BR') + '</span> recuperados <span style="color:#34d399;font-size:11px">(+' + difRecup.toLocaleString('pt-BR') + ')</span><br>' +
-                '\u2192 <span style="color:#fbbf24;font-weight:700">' + fmtCurr(projFat) + '</span> <span style="color:#fbbf24;font-size:11px">(+' + fmtCurr(difFat) + ')</span>' +
+                '\u2192 <span style="color:#34d399;font-weight:700;font-size:17px">' + projRecup.toLocaleString('pt-BR') + '</span> recuperados <span style="color:#34d399;font-size:13px">(+' + difRecup.toLocaleString('pt-BR') + ')</span><br>' +
+                '\u2192 <span style="color:#fbbf24;font-weight:700;font-size:17px">' + fmtCurr(projFat) + '</span> <span style="color:#fbbf24;font-size:13px">(+' + fmtCurr(difFat) + ')</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
-          '<div style="margin-top:10px;padding:10px;border-radius:6px;background:rgba(0,0,0,0.15);font-size:12px;color:#9ca3af;line-height:1.7">' +
+          '<div style="margin-top:14px;padding:14px 16px;border-radius:6px;background:rgba(0,0,0,0.15);font-size:14px;color:#9ca3af;line-height:1.9">' +
             'Como foi calculado:<br>' +
             '1. Taxa de recupera\u00E7\u00E3o: <b style="color:#34d399">' + totalRecuperados + '</b> recup \u00F7 <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> receberam = <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b><br>' +
             '2. Proje\u00E7\u00E3o de recuperados: <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> totais \u00D7 <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recuperados<br>' +
