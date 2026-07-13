@@ -501,13 +501,22 @@
         h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#34d399'});
         h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#f59e0b'});
         var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(2) : '0.00';
+        var txRec = tRec > 0 ? (totalRecuperados / tRec * 100) : 0;
         var projRecup = tRec > 0 ? Math.round(tCli * totalRecuperados / tRec) : 0;
         var projFat = tRec > 0 && totalRecuperados > 0 ? tCli * totalValor / tRec : 0;
         h += '<div style="margin-top:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;width:100%;font-size:15px">';
         h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(52,211,153,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Recup / Receb</div><div style="font-size:24px;font-weight:800;color:#34d399">' + (tRec > 0 ? (totalRecuperados / tRec * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:4px;font-size:13px">' + totalRecuperados + ' / ' + tRec.toLocaleString('pt-BR') + '</div></div>';
         h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(251,191,36,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Recup / Total</div><div style="font-size:24px;font-weight:800;color:#fbbf24">' + (tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:4px;font-size:13px">' + totalRecuperados + ' / ' + tCli.toLocaleString('pt-BR') + '</div></div>';
         h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(96,165,250,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Taxa Entrega</div><div style="font-size:24px;font-weight:800;color:#60a5fa">' + (tCli > 0 ? (tRec / tCli * 100).toFixed(2) : '0.00') + '%</div><div style="color:#f87171;margin-top:4px;font-size:13px">' + pctNaoAtingidos + '% incorreto</div></div>';
-        h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(245,158,11,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Potencial 100%</div><div style="font-size:24px;font-weight:800;color:#f59e0b">' + projRecup.toLocaleString('pt-BR') + ' recup</div><div style="color:#fbbf24;margin-top:4px;font-size:13px;font-weight:600">' + fmtCurr(projFat) + '</div></div>';
+        h += '<div style="text-align:center;padding:14px 6px;border-radius:8px;background:rgba(245,158,11,0.06)">' +
+          '<div style="color:#f59e0b;text-transform:uppercase;font-weight:700;letter-spacing:0.3px;margin-bottom:2px;font-size:12px">Se todos recebessem</div>' +
+          '<div style="color:#9ca3af;font-size:11px;margin-bottom:8px">Potencial com 100% de entrega</div>' +
+          '<div style="font-size:22px;font-weight:800;color:#34d399">' + projRecup.toLocaleString('pt-BR') + ' recup</div>' +
+          '<div style="font-size:19px;font-weight:700;color:#fbbf24;margin-top:2px">' + fmtCurr(projFat) + '</div>' +
+          '<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:#6b7280;line-height:1.6">' +
+            'Agora: <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> receberam → <b style="color:#34d399">' + totalRecuperados + '</b> recup (<b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b>)<br>' +
+            'Projeção: <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> × ' + txRec.toFixed(2) + '% = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recup' +
+          '</div></div>';
         h += '</div></div></div>';
         h += '</div>';
 
