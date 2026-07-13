@@ -198,6 +198,7 @@
       document.getElementById('tokenStatus').style.color = '#f59e0b';
       return fetch(url + '?ref=' + GH_BRANCH, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
         .then(function(r) {
+          if (r.status === 404) return null;
           if (!r.ok) throw new Error('GET status ' + r.status);
           return r.json();
         })
