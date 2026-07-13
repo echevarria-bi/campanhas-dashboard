@@ -12,10 +12,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "VOUCHER | 45-89 DIAS | TELEVENDAS",
-      "dataN": "10/06/2026",
-      "totalClientes": 1539,
-      "receberam": 643
+      "campanhaM": "46183",
+      "dataN": "18/03/1904",
+      "totalClientes": 643,
+      "receberam": "10062026_VOUCHER_TV_45_89"
     },
     {
       "id": 28483,
@@ -29,10 +29,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "BATATAS | 45-120 DIAS | TELEVENDAS",
-      "dataN": "18/06/2026",
-      "totalClientes": 3989,
-      "receberam": 1269
+      "campanhaM": "46191",
+      "dataN": "02/12/1910",
+      "totalClientes": 1269,
+      "receberam": "18062026_BATATAS_TV_45_120"
     },
     {
       "id": 31773,
@@ -46,10 +46,10 @@
       "data": "22/06/2026",
       "compra": "Sim",
       "valor": 165.8,
-      "campanhaM": "AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "22/06/2026",
-      "totalClientes": 333,
-      "receberam": 160
+      "campanhaM": "46195",
+      "dataN": "28/11/1900",
+      "totalClientes": 160,
+      "receberam": "22062026_ACAI_TV_45_120"
     },
     {
       "id": 34108,
@@ -63,10 +63,10 @@
       "data": "22/06/2026",
       "compra": "Sim",
       "valor": 215.8,
-      "campanhaM": "CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS",
-      "dataN": "23/06/2026",
-      "totalClientes": 897,
-      "receberam": 301
+      "campanhaM": "46196",
+      "dataN": "15/06/1902",
+      "totalClientes": 301,
+      "receberam": "23062026_BATATA_TV_45_120"
     },
     {
       "id": 38271,
@@ -80,10 +80,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "COPA | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "24/06/2026",
-      "totalClientes": 370,
-      "receberam": 183
+      "campanhaM": "46197",
+      "dataN": "04/01/1901",
+      "totalClientes": 183,
+      "receberam": "24062026_COPA_RP_20_44"
     },
     {
       "id": 39696,
@@ -97,10 +97,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "25/06/2026",
-      "totalClientes": 1164,
-      "receberam": 812
+      "campanhaM": "46198",
+      "dataN": "09/03/1903",
+      "totalClientes": 812,
+      "receberam": "25062026_DIADOACAI_TV_45_120"
     },
     {
       "id": 42764,
@@ -114,10 +114,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "26/06/2026",
-      "totalClientes": 738,
-      "receberam": 430
+      "campanhaM": "46199",
+      "dataN": "07/01/1902",
+      "totalClientes": 430,
+      "receberam": "26062026_DIADOACAI_TV_45_120"
     },
     {
       "id": 39025,
@@ -131,10 +131,10 @@
       "data": "23/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "CAMPANHA FECHAMENTO DO MÊS | 45-89 DIAS | TELEVENDAS",
-      "dataN": "29/06/2026",
-      "totalClientes": 77,
-      "receberam": 31
+      "campanhaM": "46202",
+      "dataN": "17/03/1900",
+      "totalClientes": 31,
+      "receberam": "29062026_FECHAMENTO_TV_45_89"
     },
     {
       "id": 40089,
@@ -148,10 +148,10 @@
       "data": "23/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "PROSPECÇÃO CNPJ | 45-365 DIAS | TELEVENDAS",
-      "dataN": "30/06/2026",
-      "totalClientes": 2441,
-      "receberam": 880
+      "campanhaM": "46203",
+      "dataN": "06/09/1906",
+      "totalClientes": 880,
+      "receberam": "30062026_PROSPECCAO_TV_45_365"
     },
     {
       "id": 42866,
@@ -165,10 +165,10 @@
       "data": "23/06/2026",
       "compra": "Sim",
       "valor": 926.8000000000001,
-      "campanhaM": "CAMPANHA BRASIL VENCEU | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "30/06/2026",
-      "totalClientes": 984,
-      "receberam": 314
+      "campanhaM": "46203",
+      "dataN": "10/09/1902",
+      "totalClientes": 314,
+      "receberam": "30062026_BRASILVENC_RP_20_44"
     },
     {
       "id": 2738,
@@ -182,10 +182,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "VOUCHER | 45-365 DIAS | TELEVENDAS",
-      "dataN": "01/07/2026",
-      "totalClientes": 1395,
-      "receberam": 742
+      "campanhaM": "46204",
+      "dataN": "26/10/1903",
+      "totalClientes": 742,
+      "receberam": "01072026_VOUCHER_TV_45_365"
     },
     {
       "id": 2753,
@@ -199,10 +199,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "VOLTE A COMPRAR | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "02/07/2026",
-      "totalClientes": 963,
-      "receberam": 406
+      "campanhaM": "46205",
+      "dataN": "20/08/1902",
+      "totalClientes": 406,
+      "receberam": "02072026_VOLTEACOMP_RP_20_44"
     },
     {
       "id": 7862,
@@ -216,10 +216,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 427.46000000000004,
-      "campanhaM": "AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "03/07/2026",
-      "totalClientes": 986,
-      "receberam": 358
+      "campanhaM": "46206",
+      "dataN": "12/09/1902",
+      "totalClientes": 358,
+      "receberam": "03072026_ACAI_TV_45_120"
     },
     {
       "id": 15571,
@@ -233,10 +233,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 188.51,
-      "campanhaM": "CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "06/07/2026",
-      "totalClientes": 904,
-      "receberam": 328
+      "campanhaM": "46209",
+      "dataN": "22/06/1902",
+      "totalClientes": 328,
+      "receberam": "06072026_ACAI_RP_20_44"
     },
     {
       "id": 16379,
@@ -250,10 +250,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 497.53,
-      "campanhaM": "CAMPANHA AÇAÍ | 20-44 DIAS | TELEVENDAS",
-      "dataN": "06/07/2026",
-      "totalClientes": 1436,
-      "receberam": 628
+      "campanhaM": "46209",
+      "dataN": "06/12/1903",
+      "totalClientes": 628,
+      "receberam": "06072026_ACAI_TV_20_44"
     },
     {
       "id": 24553,
@@ -267,10 +267,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 561.78,
-      "campanhaM": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
-      "dataN": "07/07/2026",
-      "totalClientes": 3561,
-      "receberam": 1558
+      "campanhaM": "46210",
+      "dataN": "30/09/1909",
+      "totalClientes": 1558,
+      "receberam": "07072026_CNPJ_TV_44_365"
     },
     {
       "id": 27951,
@@ -284,10 +284,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 19380.6,
-      "campanhaM": "CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS",
-      "dataN": "08/07/2026",
-      "totalClientes": 1100,
-      "receberam": 312
+      "campanhaM": "46211",
+      "dataN": "04/01/1903",
+      "totalClientes": 312,
+      "receberam": "08072026_CNPJ_AT_20_44"
     },
     {
       "id": 28658,
@@ -301,10 +301,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
-      "dataN": "08/07/2026",
-      "totalClientes": 1692,
-      "receberam": 523
+      "campanhaM": "46211",
+      "dataN": "18/08/1904",
+      "totalClientes": 523,
+      "receberam": "08072026_CNPJ_TV_45_400"
     },
     {
       "id": 31819,
@@ -318,10 +318,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "CAMPANHA SUPER VOUCHER| 45-120 DIAS | TELEVENDAS",
-      "dataN": "09/07/2026",
-      "totalClientes": 1166,
-      "receberam": 310
+      "campanhaM": "46212",
+      "dataN": "11/03/1903",
+      "totalClientes": 310,
+      "receberam": "09072026_SUPERVOUCH_TV_45_120"
     },
     {
       "id": 33133,
@@ -2842,11 +2842,11 @@
     {
       "id": 41214,
       "resposta": "Sem Interesse",
-      "cod": "0",
-      "vendedor": "Perdido",
-      "setor": "Perdido",
-      "regiao": "Perdido",
-      "supervisor": "Perdido",
+      "cod": "9794",
+      "vendedor": "Ilton Armindo",
+      "setor": "Externo",
+      "regiao": "Sul",
+      "supervisor": "Moizes",
       "campanha": "CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES",
       "data": "06/07/2026",
       "compra": "Não",
@@ -3048,7 +3048,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3082,7 +3082,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3099,7 +3099,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3116,7 +3116,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3150,7 +3150,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3167,7 +3167,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3201,7 +3201,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3218,7 +3218,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3235,7 +3235,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3252,7 +3252,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
@@ -3320,7 +3320,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3337,7 +3337,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3405,7 +3405,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3422,7 +3422,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3439,7 +3439,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3473,7 +3473,7 @@
       "resposta": "Teve Interesse",
       "cod": "1575",
       "vendedor": "Jenifer Rodrigues",
-      "setor": "Pré vendas",
+      "setor": "Televendas",
       "regiao": "Geral",
       "supervisor": "Franciele",
       "campanha": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
@@ -3870,6 +3870,6 @@
       "publico": "Todos\r\n45 à 120 dias sem compra"
     }
   },
-  "updatedAt": "2026-07-13T14:30:07.557Z",
+  "updatedAt": "2026-07-13T14:47:27.563Z",
   "fileName": "RELATÓRIO  - CAMPANHAS.xlsx"
 }
