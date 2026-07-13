@@ -194,15 +194,28 @@
       var content = JSON.stringify(payload, null, 2);
       var base64 = btoa(unescape(encodeURIComponent(content)));
       var url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
+      document.getElementById('tokenStatus').textContent = 'Salvando...';
+      document.getElementById('tokenStatus').style.color = '#f59e0b';
       return fetch(url + '?ref=' + GH_BRANCH, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
-        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(r) {
+          if (!r.ok) throw new Error('GET status ' + r.status);
+          return r.json();
+        })
         .then(function(existing) {
           var body = { message: 'Atualização ' + (fileName || '') + ' - ' + new Date().toLocaleString('pt-BR'), content: base64, branch: GH_BRANCH };
           if (existing && existing.sha) body.sha = existing.sha;
           return fetch(url, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
         })
-        .then(function(r) { return r.ok; })
-        .catch(function() { return false; });
+        .then(function(r) {
+          if (!r.ok) throw new Error('PUT status ' + r.status);
+          return true;
+        })
+        .catch(function(err) {
+          console.error('saveRemoteData error:', err);
+          document.getElementById('tokenStatus').textContent = err.message;
+          document.getElementById('tokenStatus').style.color = '#f87171';
+          return false;
+        });
     }
 
     function carregarDadosRemoto() {
