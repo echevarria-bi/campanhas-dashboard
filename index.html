@@ -403,13 +403,11 @@
         h += '<div class="grid-2">';
         setorKeys.forEach(function(s) {
           var d = setores[s];
-          var pct = d.leads > 0 ? (d.recup / d.leads * 100).toFixed(2) : '0.00';
           h += '<div class="chart-box" style="margin-bottom:0">';
           h += '<div style="font-size:13px;font-weight:700;color:#fcd34d;margin-bottom:12px">' + s + '</div>';
-          h += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">';
+          h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
           h += '<div><div class="label" style="font-size:10px;color:#6b7280;text-transform:uppercase">Recuperados</div><div style="font-size:20px;font-weight:800;color:#34d399">' + d.recup + '</div></div>';
           h += '<div><div class="label" style="font-size:10px;color:#6b7280;text-transform:uppercase">Faturamento</div><div style="font-size:20px;font-weight:800;color:#fbbf24">' + fmtCurr(d.fat) + '</div></div>';
-          h += '<div><div class="label" style="font-size:10px;color:#6b7280;text-transform:uppercase">% Rec.</div><div style="font-size:20px;font-weight:800;color:' + (pct > 20 ? '#34d399' : pct > 0 ? '#f59e0b' : '#6b7280') + '">' + pct + '%</div></div>';
           h += '</div></div>';
         });
         h += '</div>';
@@ -475,7 +473,6 @@
         var totalReceberam = Object.keys(datasMP).reduce(function(s,dt){return s + (parseFloat(datasMP[dt].receberam)||0);}, 0);
         var fatGlobal = totalValor;
         var ticketMedio = totalRecuperados > 0 ? fatGlobal / totalRecuperados : 0;
-        var roi = custoTotal > 0 ? ((fatGlobal - custoTotal) / custoTotal * 100) : 0;
         var lucroLiquido = fatGlobal - custoTotal;
         var custoPorRecuperado = totalRecuperados > 0 ? custoTotal / totalRecuperados : 0;
 
@@ -486,7 +483,6 @@
         var st = function(label, valor, cor, form) { var f = form === 'curr' ? fmtCurr : function(v) { return typeof v === 'number' ? v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : v; }; var sufixo = form === 'pct' ? '%' : ''; return '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="color:#f3f4f6;font-size:14px">' + label + '</span><span style="color:' + cor + ';font-size:20px;font-weight:800;text-shadow:0 0 20px ' + cor + '44">' + f(valor) + sufixo + '</span></div>'; };
         h += st('Total Investido', custoTotal, '#f87171', 'curr');
         h += st('Lucro L\u00EDquido', lucroLiquido, lucroLiquido >= 0 ? '#34d399' : '#f87171', 'curr');
-        h += st('ROI', roi, roi >= 0 ? '#34d399' : '#f87171', 'pct');
         h += st('Ticket M\u00E9dio por Recuperado', ticketMedio, '#60a5fa', 'curr');
         h += st('Custo por Recuperado', custoPorRecuperado, '#a78bfa', 'curr');
         h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1e1b4b"><span style="color:#f3f4f6;font-size:15px">Recuperados</span><span style="color:#34d399;font-size:22px;font-weight:800">' + totalRecuperados.toLocaleString('pt-BR') + '</span></div>';
