@@ -337,8 +337,8 @@
       "valor": 1474.3899999999999,
       "campanhaM": "CAMPANHA AÇAÍ| 40-120 DIAS | TELEVENDAS",
       "dataN": "10/07/2026",
-      "totalClientes": "",
-      "receberam": ""
+      "totalClientes": 4057,
+      "receberam": 1223
     },
     {
       "id": 33273,
@@ -4503,6 +4503,6 @@
       "publico": "Todos"
     }
   },
-  "updatedAt": "2026-07-13T15:41:54.525Z",
+  "updatedAt": "2026-07-13T17:15:37.242Z",
   "fileName": "RELATÓRIO  - CAMPANHAS.xlsx"
 }
