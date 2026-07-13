@@ -62,6 +62,7 @@
       <span id="tokenStatus" style="font-size:10px;color:#6b7280"></span>
       <input type="password" id="tokenInput" class="input-token" placeholder="Token GitHub" onkeydown="if(event.key==='Enter'){setToken(this.value);this.style.display='none'}">
       <button onclick="document.getElementById('tokenInput').style.display='inline-block';document.getElementById('tokenInput').focus()" class="btn-token" id="btnToken">&#128274; Token</button>
+      <button onclick="testarToken()" style="background:transparent;border:1px solid #4a4d6e;color:#9ca3af;padding:4px 10px;border-radius:6px;font-size:10px;cursor:pointer;display:none" id="btnTestarToken">Testar</button>
       <button onclick="novoArquivo()" style="background:#1e1b4b;border:1px solid #78350f;color:#fcd34d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:none" id="btnNovoArquivo">&#128193; Novo arquivo</button>
     </div>
   </header>
@@ -174,6 +175,29 @@
       document.getElementById('tokenStatus').textContent = 'Token salvo';
       document.getElementById('tokenStatus').style.color = '#34d399';
       document.getElementById('btnToken').style.display = 'none';
+      document.getElementById('btnTestarToken').style.display = 'inline-flex';
+    }
+
+    function testarToken() {
+      var token = getToken();
+      if (!token) { document.getElementById('tokenStatus').textContent = 'Sem token'; return; }
+      document.getElementById('tokenStatus').textContent = 'Testando...';
+      document.getElementById('tokenStatus').style.color = '#f59e0b';
+      fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
+        .then(function(r) {
+          if (r.ok) {
+            document.getElementById('tokenStatus').textContent = 'Token OK - repo acessado';
+            document.getElementById('tokenStatus').style.color = '#34d399';
+          } else {
+            return r.json().then(function(j) {
+              document.getElementById('tokenStatus').textContent = (j.message || 'Erro ' + r.status);
+              document.getElementById('tokenStatus').style.color = '#f87171';
+            });
+          }
+        }).catch(function(err) {
+          document.getElementById('tokenStatus').textContent = err.message;
+          document.getElementById('tokenStatus').style.color = '#f87171';
+        });
     }
 
     function fetchRemoteData() {
@@ -199,7 +223,7 @@
       return fetch(url + '?ref=' + GH_BRANCH, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
         .then(function(r) {
           if (r.status === 404) return null;
-          if (!r.ok) throw new Error('GET status ' + r.status);
+          if (!r.ok) return r.json().then(function(j) { throw new Error(JSON.stringify(j)); });
           return r.json();
         })
         .then(function(existing) {
@@ -208,7 +232,7 @@
           return fetch(url, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
         })
         .then(function(r) {
-          if (!r.ok) throw new Error('PUT status ' + r.status);
+          if (!r.ok) return r.json().then(function(j) { throw new Error(JSON.stringify(j)); });
           return true;
         })
         .catch(function(err) {
@@ -232,6 +256,7 @@
           document.getElementById('footer').innerHTML = 'Última atualização: ' + dt.toLocaleDateString('pt-BR') + ' às ' + dt.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) + ' &middot; <strong>' + (data.fileName || '') + '</strong>';
           if (getToken()) document.getElementById('btnToken').style.display = 'none';
           else document.getElementById('btnToken').style.display = 'inline-flex';
+          if (getToken()) document.getElementById('btnTestarToken').style.display = 'inline-flex';
           document.getElementById('tokenStatus').textContent = 'Dados remotos';
           document.getElementById('tokenStatus').style.color = '#6b7280';
         } else {
@@ -242,6 +267,7 @@
 
     function mostrarTokenSeNecessario() {
       if (!getToken()) document.getElementById('btnToken').style.display = 'inline-flex';
+      else document.getElementById('btnTestarToken').style.display = 'inline-flex';
     }
 
     function parseCampanhas(wb) {
