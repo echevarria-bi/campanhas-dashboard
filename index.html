@@ -397,7 +397,7 @@
         setores[s].leads++;
         if (mr.valor > 0) { setores[s].recup++; setores[s].fat += mr.valor; }
       });
-      var setorKeys = Object.keys(setores).sort();
+      var setorKeys = Object.keys(setores).filter(function(k){return k==='Externo'||k==='Televendas';}).sort();
       if (setorKeys.length) {
         h += '<h2 style="font-size:14px;font-weight:700;color:#fcd34d;margin:24px 0 14px 10px;border-left:3px solid #f59e0b;padding-left:10px">' + icn('users',14) + ' Comparativo por Setor</h2>';
         h += '<div class="grid-2">';
