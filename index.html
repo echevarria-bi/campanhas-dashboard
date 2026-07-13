@@ -304,12 +304,15 @@
         return da[2]-db[2] || da[1]-db[1] || da[0]-db[0] || (pa[1] < pb[1] ? -1 : pa[1] > pb[1] ? 1 : 0);
       });
 
-      // Build slug lookup by campaign name (fallback for entries without M-P data)
+      // Build slug lookup by campaign name (from ALL data, not just current month)
       var slugPorCamp = {};
-      Object.keys(datasMP).forEach(function(k) {
-        var pk = k.split('|');
-        slugPorCamp[pk.slice(1).join('|')] = datasMP[k].slug || '';
-      });
+      for (var si = 0; si < dados.length; si++) {
+        var sd = dados[si];
+        if (!sd.campanhaM || !sd.dataN) continue;
+        var sk = sd.dataN + '|' + sd.campanhaM;
+        var sp = sk.split('|');
+        slugPorCamp[sp.slice(1).join('|')] = gerarSlug(sd.dataN, sd.campanhaM);
+      }
 
       if (allKeys.length) {
         var tCli = 0, tRec = 0, tL = 0, tR = 0, tFat = 0;
