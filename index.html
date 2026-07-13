@@ -534,9 +534,11 @@
             '</div>' +
           '</div>' +
           '<div style="margin-top:10px;padding:10px;border-radius:6px;background:rgba(0,0,0,0.15);font-size:12px;color:#9ca3af;line-height:1.7">' +
-            'Como foi calculado: dos <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> que receberam, <b style="color:#34d399">' + totalRecuperados + '</b> recuperaram (<b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> de taxa). ' +
-            'Se essa mesma taxa valer para todos os <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> clientes: ' +
-            '<b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> \u00D7 <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recuperados, gerando <b style="color:#fbbf24">' + fmtCurr(projFat) + '</b> em faturamento.' +
+            'Como foi calculado:<br>' +
+            '1. Taxa de recupera\u00E7\u00E3o: <b style="color:#34d399">' + totalRecuperados + '</b> recup \u00F7 <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> receberam = <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b><br>' +
+            '2. Proje\u00E7\u00E3o de recuperados: <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> totais \u00D7 <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recuperados<br>' +
+            '3. Ticket m\u00E9dio atual por recuperado: <b style="color:#fbbf24">' + fmtCurr(totalValor) + '</b> \u00F7 <b style="color:#34d399">' + totalRecuperados + '</b> recup = <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b><br>' +
+            '4. Proje\u00E7\u00E3o de faturamento: <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recup \u00D7 <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b> = <b style="color:#fbbf24">' + fmtCurr(projFat) + '</b>' +
           '</div></div>';
         h += '</div></div></div>';
 
