@@ -49,6 +49,9 @@
     .tab-month.active{color:#a78bfa;background:transparent;border:none;border-bottom:2.5px solid #a78bfa;border-radius:0;padding:6px 14px 3.5px;box-shadow:none}
     footer{text-align:center;padding:16px 20px;font-size:11px;color:#4a4d6e;border-top:1px solid #1e1b4b;margin-top:24px}
     footer strong{color:#6b7280}
+    .btn-token{background:transparent;border:1px solid #4a4d6e;color:#9ca3af;padding:4px 10px;border-radius:6px;font-size:10px;cursor:pointer;display:none}
+    .btn-token:hover{border-color:#f59e0b;color:#fcd34d}
+    .input-token{width:120px;background:#11131c;border:1px solid #1e1b4b;border-radius:6px;padding:4px 8px;color:#e1e7ef;font-size:11px;outline:none;display:none}
   </style>
 </head>
 <body>
@@ -56,6 +59,9 @@
     <h1>&#128222; Dashboard de Campanhas</h1>
     <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <span id="statusFile" style="font-size:11px;color:#6b7280"></span>
+      <span id="tokenStatus" style="font-size:10px;color:#6b7280"></span>
+      <input type="password" id="tokenInput" class="input-token" placeholder="Token GitHub" onkeydown="if(event.key==='Enter'){setToken(this.value);this.style.display='none'}">
+      <button onclick="document.getElementById('tokenInput').style.display='';document.getElementById('tokenInput').focus()" class="btn-token" id="btnToken">&#128274; Token</button>
       <button onclick="novoArquivo()" style="background:#1e1b4b;border:1px solid #78350f;color:#fcd34d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:none" id="btnNovoArquivo">&#128193; Novo arquivo</button>
     </div>
   </header>
@@ -74,6 +80,7 @@
 
   <script>
     var _dados = null, _activeTab = 'geral', _campInfo = {};
+    var GH_OWNER = 'echevarria-bi', GH_REPO = 'campanhas-dashboard', GH_FILE = 'data.json', GH_BRANCH = 'master';
 
     function limparNome(str) {
       return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '');
@@ -112,6 +119,14 @@
         document.getElementById('statusFile').textContent = 'Carregado';
         document.getElementById('statusFile').style.color = '#34d399';
         setTimeout(function() { document.getElementById('statusFile').textContent = ''; }, 3000);
+        mostrarTokenSeNecessario();
+        saveRemoteData(_dados, _campInfo, nome).then(function(ok) {
+          if (ok) {
+            document.getElementById('tokenStatus').textContent = 'Salvo no repositório';
+            document.getElementById('tokenStatus').style.color = '#34d399';
+            setTimeout(function() { document.getElementById('tokenStatus').textContent = 'Dados remotos'; }, 4000);
+          }
+        });
       } catch(err) {
         document.getElementById('areaInicial').innerHTML = '<div style="font-size:40px;margin-bottom:8px">&#9888;</div><div style="color:#f87171;font-size:14px">Erro: ' + err.message + '</div><div style="color:#4a4d6e;font-size:12px;margin-top:4px;cursor:pointer" onclick="document.getElementById(\'inputArquivo\').click()">Clique para tentar novamente</div>';
       }
@@ -127,7 +142,7 @@
 
     function autoLoad() {
       var area = document.getElementById('areaInicial');
-      area.innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Carregando base_campanhas.xlsx...</div>';
+      area.innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Carregando dados...</div>';
       fetch('RELATÓRIO - CAMPANHAS.xlsx').then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.arrayBuffer();
@@ -135,10 +150,9 @@
         processBuffer(buf, 'RELATÓRIO - CAMPANHAS.xlsx');
       }).catch(function() {
         area.innerHTML = '<div style="font-size:40px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>';
+        mostrarTokenSeNecessario();
       });
     }
-
-    autoLoad();
 
     function novoArquivo() {
       document.getElementById('areaInicial').parentElement.style.display = 'block';
@@ -147,6 +161,73 @@
       document.getElementById('footer').style.display = 'none';
       document.getElementById('btnNovoArquivo').style.display = 'none';
       _dados = null;
+      _campInfo = {};
+      document.getElementById('tokenStatus').textContent = '';
+      mostrarTokenSeNecessario();
+    }
+
+    function getToken() { try { return localStorage.getItem('campToken') || ''; } catch(e) { return ''; } }
+
+    function setToken(t) {
+      if (!t) return;
+      try { localStorage.setItem('campToken', t); } catch(e) {}
+      document.getElementById('tokenStatus').textContent = 'Token salvo';
+      document.getElementById('tokenStatus').style.color = '#34d399';
+      document.getElementById('btnToken').style.display = 'none';
+    }
+
+    function fetchRemoteData() {
+      return fetch('https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/' + GH_FILE + '?t=' + Date.now())
+        .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
+        .catch(function() { return null; });
+    }
+
+    function saveRemoteData(rows, campInfo, fileName) {
+      var token = getToken();
+      if (!token) {
+        document.getElementById('tokenStatus').textContent = 'Token não configurado';
+        document.getElementById('tokenStatus').style.color = '#f87171';
+        document.getElementById('btnToken').style.display = 'inline-flex';
+        return Promise.resolve(false);
+      }
+      var payload = { rows: rows, campInfo: campInfo, updatedAt: new Date().toISOString(), fileName: fileName || '' };
+      var content = JSON.stringify(payload, null, 2);
+      var base64 = btoa(unescape(encodeURIComponent(content)));
+      var url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
+      return fetch(url + '?ref=' + GH_BRANCH, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(existing) {
+          var body = { message: 'Atualização ' + (fileName || '') + ' - ' + new Date().toLocaleString('pt-BR'), content: base64, branch: GH_BRANCH };
+          if (existing && existing.sha) body.sha = existing.sha;
+          return fetch(url, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
+        })
+        .then(function(r) { return r.ok; })
+        .catch(function() { return false; });
+    }
+
+    function carregarDadosRemoto() {
+      fetchRemoteData().then(function(data) {
+        if (data && data.rows && data.rows.length) {
+          _dados = data.rows;
+          _campInfo = data.campInfo || {};
+          renderCampanhas();
+          document.getElementById('areaInicial').parentElement.style.display = 'none';
+          document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
+          var dt = new Date(data.updatedAt);
+          document.getElementById('footer').style.display = 'block';
+          document.getElementById('footer').innerHTML = 'Última atualização: ' + dt.toLocaleDateString('pt-BR') + ' às ' + dt.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) + ' &middot; <strong>' + (data.fileName || '') + '</strong>';
+          if (getToken()) document.getElementById('btnToken').style.display = 'none';
+          else document.getElementById('btnToken').style.display = 'inline-flex';
+          document.getElementById('tokenStatus').textContent = 'Dados remotos';
+          document.getElementById('tokenStatus').style.color = '#6b7280';
+        } else {
+          autoLoad();
+        }
+      });
+    }
+
+    function mostrarTokenSeNecessario() {
+      if (!getToken()) document.getElementById('btnToken').style.display = 'inline-flex';
     }
 
     function parseCampanhas(wb) {
@@ -485,6 +566,9 @@
 
       return h;
     }
+
+    // Try remote data first, fallback to autoLoad
+    carregarDadosRemoto();
   </script>
   <style>
       .spinner{display:inline-block;width:16px;height:16px;border:2px solid #1e1b4b;border-top-color:#f59e0b;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
