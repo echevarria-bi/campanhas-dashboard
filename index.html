@@ -61,7 +61,7 @@
       <span id="statusFile" style="font-size:11px;color:#6b7280"></span>
       <span id="tokenStatus" style="font-size:10px;color:#6b7280"></span>
       <input type="password" id="tokenInput" class="input-token" placeholder="Token GitHub" onkeydown="if(event.key==='Enter'){setToken(this.value);this.style.display='none'}">
-      <button onclick="document.getElementById('tokenInput').style.display='';document.getElementById('tokenInput').focus()" class="btn-token" id="btnToken">&#128274; Token</button>
+      <button onclick="document.getElementById('tokenInput').style.display='inline-block';document.getElementById('tokenInput').focus()" class="btn-token" id="btnToken">&#128274; Token</button>
       <button onclick="novoArquivo()" style="background:#1e1b4b;border:1px solid #78350f;color:#fcd34d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:none" id="btnNovoArquivo">&#128193; Novo arquivo</button>
     </div>
   </header>
