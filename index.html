@@ -479,13 +479,13 @@
         h += '<div class="grid-2">';
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
         h += '<h2 style="margin-bottom:16px">' + icn('bar-chart-3',14) + ' Custo vs Retorno</h2>';
-        h += '<div style="padding:8px;flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center">';
-        function cb(label, valor, bg, cor) { return '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-radius:12px;background:' + bg + '"><span style="color:#d1d5db;font-size:16px;font-weight:500">' + label + '</span><span style="color:' + cor + ';font-size:28px;font-weight:800">' + valor + '</span></div>'; }
+        h += '<div style="flex:1;display:flex;flex-direction:column;gap:8px">';
+        function cb(label, valor, bg, cor) { return '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:' + bg + '"><span style="color:#d1d5db;font-size:17px;font-weight:500">' + label + '</span><span style="color:' + cor + ';font-size:30px;font-weight:800">' + valor + '</span></div>'; }
         h += cb('Total Investido', fmtCurr(custoTotal), 'rgba(248,113,113,0.07)', '#f87171');
         h += cb('Lucro L\u00EDquido', fmtCurr(lucroLiquido), 'rgba(52,211,153,0.07)', lucroLiquido >= 0 ? '#34d399' : '#f87171');
         h += cb('Ticket M\u00E9dio', fmtCurr(ticketMedio), 'rgba(96,165,250,0.07)', '#60a5fa');
         h += cb('Custo por Recuperado', fmtCurr(custoPorRecuperado), 'rgba(167,139,250,0.07)', '#a78bfa');
-        h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-radius:12px;background:rgba(52,211,153,0.07)"><span style="color:#d1d5db;font-size:16px;font-weight:500">Recuperados</span><span style="color:#34d399;font-size:28px;font-weight:800">' + totalRecuperados.toLocaleString('pt-BR') + '</span></div>';
+        h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:rgba(52,211,153,0.07)"><span style="color:#d1d5db;font-size:17px;font-weight:500">Recuperados</span><span style="color:#34d399;font-size:30px;font-weight:800">' + totalRecuperados.toLocaleString('pt-BR') + '</span></div>';
         h += '</div></div>';
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
         h += '<h2 style="margin-bottom:16px">' + icn('funnel',14) + ' Funil de Convers\u00E3o <span class="sub">&rarr; Fluxo geral</span></h2>';
