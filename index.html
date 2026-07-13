@@ -441,7 +441,7 @@
             if (info.publico) h += '<div><div style="font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.5px;margin-bottom:4px">Público-Alvo</div><div style="font-size:13px;color:#d1d5db;line-height:1.6;padding:12px;background:#11131c;border-radius:8px;border:1px solid #1e1b4b">' + info.publico.replace(/\n/g,'<br>') + '</div></div>';
             h += '</div>';
           }
-          h += '<div style="flex:0 0 auto"><img src="' + imgPath + '" style="max-height:130px;max-width:200px;border-radius:8px;border:1px solid #1e1b4b" onerror="this.style.display=\'none\'"></div>';
+          h += '<div style="flex:0 0 auto;cursor:zoom-in" onclick="abrirZoom(\'' + imgPath + '\')"><img src="' + imgPath + '" style="max-height:130px;max-width:200px;border-radius:8px;border:1px solid #1e1b4b" onerror="this.parentElement.style.display=\'none\'"></div>';
           h += '</div></td></tr>';
         });
         h += '<tr class="tot-row"><td></td><td style="font-weight:700">Total</td><td></td><td></td>' +
@@ -485,8 +485,21 @@
     }
   </script>
   <style>
-    .spinner{display:inline-block;width:16px;height:16px;border:2px solid #1e1b4b;border-top-color:#f59e0b;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+      .spinner{display:inline-block;width:16px;height:16px;border:2px solid #1e1b4b;border-top-color:#f59e0b;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
     @keyframes spin{to{transform:rotate(360deg)}}
+    .lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:9999;justify-content:center;align-items:center;cursor:zoom-out}
+    .lightbox.show{display:flex}
+    .lightbox img{max-width:92vw;max-height:92vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6);cursor:default}
+    .lightbox .close{position:fixed;top:20px;left:20px;width:36px;height:36px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);border-radius:50%;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10000}
+    .lightbox .close:hover{background:rgba(245,158,11,.3);border-color:#f59e0b}
   </style>
+  <div class="lightbox" id="lightbox" onclick="fecharZoom()">
+    <button class="close" onclick="event.stopPropagation();fecharZoom()">&#10005;</button>
+    <img id="lightbox-img" src="" alt="Zoom">
+  </div>
+  <script>
+    function abrirZoom(path) { document.getElementById('lightbox-img').src = path; document.getElementById('lightbox').classList.add('show'); }
+    function fecharZoom() { document.getElementById('lightbox').classList.remove('show'); document.getElementById('lightbox-img').src = ''; }
+  </script>
 </body>
 </html>
