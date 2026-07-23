@@ -278,10 +278,10 @@
           data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : String(r[8]).trim(),
           compra: r[9],
           valor: parseFloat(r[10]) || 0,
-          campanhaM: String(r[12]).trim(),
-          dataN: typeof r[13] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[13]) : String(r[13]).trim(),
-          totalClientes: r[14],
-          receberam: r[15]
+          campanhaM: String(r[11]).trim(),
+          dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : String(r[12]).trim(),
+          totalClientes: r[13],
+          receberam: r[14]
         });
       }
       return rows;
@@ -363,30 +363,34 @@
       }
 
       // Build leadsPorData grouped by data+campanha
+      // Respondidos = clientes que responderam (todos os registros)
+      // Convertidos = clientes que compraram depois do disparo (fat > 0)
       var leadsPorData = {};
       for (var mi = 0; mi < filtered.length; mi++) {
         var mr = filtered[mi];
         if (!mr.data || !mr.campanha) continue;
         if (!matchMonth(mr.data, monthNum)) continue;
         var key = mr.data + '|' + mr.campanha;
-        if (!leadsPorData[key]) leadsPorData[key] = {total:0, recup:0, faturamento:0, setores:[]};
+        if (!leadsPorData[key]) leadsPorData[key] = {total:0, convertidos:0, faturamento:0, setores:[]};
         leadsPorData[key].total++;
-        if (mr.valor > 0) { leadsPorData[key].recup++; leadsPorData[key].faturamento += mr.valor; }
+        if (mr.valor > 0) { leadsPorData[key].convertidos++; leadsPorData[key].faturamento += mr.valor; }
         if (mr.setor && leadsPorData[key].setores.indexOf(mr.setor) < 0) leadsPorData[key].setores.push(mr.setor);
       }
 
       // Cards use lead data for the month
-      var totalLeads = 0, totalValor = 0, totalRecuperados = 0;
+      var totalLeads = 0, totalValor = 0, totalConvertidos = 0;
       Object.keys(leadsPorData).forEach(function(k) {
         var l = leadsPorData[k];
         totalLeads += l.total;
-        totalRecuperados += l.recup;
+        totalConvertidos += l.convertidos;
         totalValor += l.faturamento;
       });
 
       var h = '<div class="cards">';
-      h += '<div class="card"><div class="label">Recuperados</div><div class="value" style="color:#34d399">' + totalRecuperados + '</div></div>';
-      h += '<div class="card"><div class="label">Valor Total</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
+      h += '<div class="card"><div class="label">Contatos</div><div class="value" style="color:#60a5fa">' + totalLeads + '</div></div>';
+      h += '<div class="card"><div class="label">Convers\u00F5es</div><div class="value" style="color:#34d399">' + totalConvertidos + '</div></div>';
+      h += '<div class="card"><div class="label">Faturamento</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
+      h += '<div class="card"><div class="label">Taxa Convers\u00E3o</div><div class="value" style="color:#a78bfa">' + (totalLeads > 0 ? (totalConvertidos / totalLeads * 100).toFixed(1) : '0') + '%</div></div>';
       h += '</div>';
 
       // Sector section — moved up as comparison
@@ -394,9 +398,9 @@
       filtered.forEach(function(mr) {
         if (!matchMonth(mr.data, monthNum)) return;
         var s = mr.setor || '(sem setor)';
-        if (!setores[s]) setores[s] = {leads:0, recup:0, fat:0};
-        setores[s].leads++;
-        if (mr.valor > 0) { setores[s].recup++; setores[s].fat += mr.valor; }
+        if (!setores[s]) setores[s] = {contatos:0, convertidos:0, fat:0};
+        setores[s].contatos++;
+        if (mr.valor > 0) { setores[s].convertidos++; setores[s].fat += mr.valor; }
       });
       var setorKeys = Object.keys(setores).filter(function(k){return k==='Externo'||k==='Televendas';}).sort();
       if (setorKeys.length) {
@@ -404,12 +408,16 @@
         h += '<div class="grid-2">';
         setorKeys.forEach(function(s) {
           var d = setores[s];
+          var txConv = d.contatos > 0 ? (d.convertidos / d.contatos * 100).toFixed(1) : '0';
           h += '<div class="chart-box" style="margin-bottom:0">';
           h += '<div style="font-size:16px;font-weight:700;color:#fcd34d;margin-bottom:12px">' + s + '</div>';
-          h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
-          h += '<div><div class="label" style="font-size:12px;color:#6b7280;text-transform:uppercase">Recuperados</div><div style="font-size:24px;font-weight:800;color:#34d399">' + d.recup + '</div></div>';
+          h += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">';
+          h += '<div><div class="label" style="font-size:12px;color:#6b7280;text-transform:uppercase">Contatos</div><div style="font-size:24px;font-weight:800;color:#60a5fa">' + d.contatos + '</div></div>';
+          h += '<div><div class="label" style="font-size:12px;color:#6b7280;text-transform:uppercase">Convers\u00F5es</div><div style="font-size:24px;font-weight:800;color:#34d399">' + d.convertidos + '</div></div>';
           h += '<div><div class="label" style="font-size:12px;color:#6b7280;text-transform:uppercase">Faturamento</div><div style="font-size:24px;font-weight:800;color:#fbbf24">' + fmtCurr(d.fat) + '</div></div>';
-          h += '</div></div>';
+          h += '</div>';
+          h += '<div style="margin-top:8px;padding:6px 10px;border-radius:6px;background:rgba(52,211,153,0.08);font-size:13px;color:#34d399;font-weight:600">Taxa: ' + txConv + '%</div>';
+          h += '</div>';
         });
         h += '</div>';
       }
@@ -436,17 +444,17 @@
       }
 
       if (allKeys.length) {
-        var tCli = 0, tRec = 0, tL = 0, tR = 0, tFat = 0;
+        var tCli = 0, tRec = 0, tL = 0, tC = 0, tFat = 0;
         allKeys.forEach(function(k) {
           var mp = datasMP[k] || {};
           var l = leadsPorData[k] || {};
           tCli += parseFloat(mp.totalClientes) || 0;
           tRec += parseFloat(mp.receberam) || 0;
           tL += l.total || 0;
-          tR += l.recup || 0;
+          tC += l.convertidos || 0;
           tFat += l.faturamento || 0;
         });
-        var funnelMax = Math.max(tCli, tRec, totalLeads, totalRecuperados, 1);
+        var funnelMax = Math.max(tCli, tRec, totalLeads, totalConvertidos, 1);
 
         function funnelW(val) { var p = Math.log(val + 1) / Math.log(tCli + 1) * 100; return Math.max(p, 10); }
 
@@ -473,9 +481,9 @@
         var custoTotal = getCustoMes(monthNum);
         var totalReceberam = Object.keys(datasMP).reduce(function(s,dt){return s + (parseFloat(datasMP[dt].receberam)||0);}, 0);
         var fatGlobal = totalValor;
-        var ticketMedio = totalRecuperados > 0 ? fatGlobal / totalRecuperados : 0;
+        var ticketMedio = totalConvertidos > 0 ? fatGlobal / totalConvertidos : 0;
         var lucroLiquido = fatGlobal - custoTotal;
-        var custoPorRecuperado = totalRecuperados > 0 ? custoTotal / totalRecuperados : 0;
+        var custoPorConvertido = totalConvertidos > 0 ? custoTotal / totalConvertidos : 0;
 
         h += '<div class="grid-2">';
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
@@ -485,35 +493,35 @@
         h += cb('Total Investido', fmtCurr(custoTotal), 'rgba(248,113,113,0.07)', '#f87171');
         h += cb('Lucro L\u00EDquido', fmtCurr(lucroLiquido), 'rgba(52,211,153,0.07)', lucroLiquido >= 0 ? '#34d399' : '#f87171');
         h += cb('Ticket M\u00E9dio', fmtCurr(ticketMedio), 'rgba(96,165,250,0.07)', '#60a5fa');
-        h += cb('Custo por Recuperado', fmtCurr(custoPorRecuperado), 'rgba(167,139,250,0.07)', '#a78bfa');
-        h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:rgba(52,211,153,0.07)"><span style="color:#d1d5db;font-size:17px;font-weight:500">Recuperados</span><span style="color:#34d399;font-size:30px;font-weight:800">' + totalRecuperados.toLocaleString('pt-BR') + '</span></div>';
+        h += cb('Custo por Convertido', fmtCurr(custoPorConvertido), 'rgba(167,139,250,0.07)', '#a78bfa');
+        h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:rgba(52,211,153,0.07)"><span style="color:#d1d5db;font-size:17px;font-weight:500">Convertidos</span><span style="color:#34d399;font-size:30px;font-weight:800">' + totalConvertidos.toLocaleString('pt-BR') + '</span></div>';
         h += '</div></div>';
         h += '<div class="chart-box" style="display:flex;flex-direction:column">';
         h += '<h2 style="margin-bottom:16px">' + icn('funnel',14) + ' Funil de Convers\u00E3o <span class="sub">&rarr; Fluxo geral</span></h2>';
         h += '<div style="padding:6px 0;flex:1;display:flex;flex-direction:column;align-items:center">';
         var txEntrega = tCli > 0 ? (tRec / tCli * 100).toFixed(2) : '0.00';
         var txContato = tRec > 0 ? (totalLeads / tRec * 100).toFixed(2) : '0.00';
-        var txConv = totalLeads > 0 ? (totalRecuperados / totalLeads * 100).toFixed(2) : '0.00';
-        var txGlobal = tCli > 0 ? (totalRecuperados / tCli * 100).toFixed(2) : '0.00';
+        var txConv = totalLeads > 0 ? (totalConvertidos / totalLeads * 100).toFixed(2) : '0.00';
+        var txGlobal = tCli > 0 ? (totalConvertidos / tCli * 100).toFixed(2) : '0.00';
         var custoPorContato = totalLeads > 0 ? custoTotal / totalLeads : 0;
         var custoPorReceberam = totalReceberam > 0 ? custoTotal / totalReceberam : 0;
         h += funnelStg('Total Clientes', tCli, '100%', '#60a5fa', null);
         h += funnelStg('Receberam', tRec, txEntrega + '%', '#a78bfa', {tx:txEntrega, desc:'receberam', custo:custoPorReceberam, cor:'#a78bfa'});
-        h += funnelStg('Contatos Gerados', totalLeads, txContato + '%', '#34d399', {tx:txContato, desc:'geraram contato', custo:custoPorContato, cor:'#34d399'});
-        h += funnelStg('Recuperados', totalRecuperados, txConv + '%', '#f59e0b', {tx:txConv, desc:'convertidos', custo:custoPorRecuperado, cor:'#f59e0b'});
+        h += funnelStg('Responderam', totalLeads, txContato + '%', '#34d399', {tx:txContato, desc:'responderam', custo:custoPorContato, cor:'#34d399'});
+        h += funnelStg('Convertidos', totalConvertidos, txConv + '%', '#f59e0b', {tx:txConv, desc:'compraram', custo:custoPorConvertido, cor:'#f59e0b'});
         var pctNaoAtingidos = tCli > 0 ? ((tCli - tRec) / tCli * 100).toFixed(2) : '0.00';
-        var txRec = tRec > 0 ? (totalRecuperados / tRec * 100) : 0;
-        var projRecup = tRec > 0 ? Math.round(tCli * totalRecuperados / tRec) : 0;
-        var projFat = tRec > 0 && totalRecuperados > 0 ? tCli * totalValor / tRec : 0;
+        var txRec = tRec > 0 ? (totalConvertidos / tRec * 100) : 0;
+        var projRecup = tRec > 0 ? Math.round(tCli * totalConvertidos / tRec) : 0;
+        var projFat = tRec > 0 && totalConvertidos > 0 ? tCli * totalValor / tRec : 0;
         h += '<div style="margin-top:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;font-size:15px">';
-        h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(52,211,153,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Recup / Receb</div><div style="font-size:24px;font-weight:800;color:#34d399">' + (tRec > 0 ? (totalRecuperados / tRec * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:4px;font-size:13px">' + totalRecuperados + ' / ' + tRec.toLocaleString('pt-BR') + '</div></div>';
+        h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(52,211,153,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Conv / Receb</div><div style="font-size:24px;font-weight:800;color:#34d399">' + (tRec > 0 ? (totalConvertidos / tRec * 100).toFixed(2) : '0.00') + '%</div><div style="color:#6b7280;margin-top:4px;font-size:13px">' + totalConvertidos + ' / ' + tRec.toLocaleString('pt-BR') + '</div></div>';
         h += '<div style="text-align:center;padding:12px 4px;border-radius:8px;background:rgba(96,165,250,0.06)"><div style="color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:6px;font-size:13px">Taxa Entrega</div><div style="font-size:24px;font-weight:800;color:#60a5fa">' + (tCli > 0 ? (tRec / tCli * 100).toFixed(2) : '0.00') + '%</div><div style="color:#f87171;margin-top:4px;font-size:13px">' + pctNaoAtingidos + '% n\u00E3o atingidos</div></div>';
         h += '</div>';
-        var difRecup = projRecup - totalRecuperados;
+        var difRecup = projRecup - totalConvertidos;
         var difFat = projFat - totalValor;
         h += '</div></div></div>';
 
-        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento (clique na campanha para detalhes)</span></h2><div class="table-wrap"><table><thead><tr><th style="text-align:center">Ranking</th><th>Campanha</th><th>Data</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Contatos</th><th class="text-right">Recuperados</th><th class="text-right">Faturamento</th><th>% Rec.</th></tr></thead><tbody>';
+        h += '<div class="chart-box"><h2>' + icn('trophy',14) + ' Ranking de Campanhas <span class="sub">&rarr; Por faturamento (clique na campanha para detalhes)</span></h2><div class="table-wrap"><table><thead><tr><th style="text-align:center">Ranking</th><th>Campanha</th><th>Data</th><th class="text-right">Total Clientes</th><th class="text-right">Receberam</th><th class="text-right">Responderam</th><th class="text-right">Convertidos</th><th class="text-right">Faturamento</th><th>% Conv.</th></tr></thead><tbody>';
         var campRank = {};
         for (var di = 0; di < allKeys.length; di++) {
           var key = allKeys[di];
@@ -521,19 +529,19 @@
           var dataDisp = parts[0];
           var camp = parts.length > 1 ? parts.slice(1).join('|') : '(sem campanha)';
           var mp = datasMP[key] || {};
-          var l = leadsPorData[key] || {total:0, recup:0, faturamento:0, setores:[]};
+          var l = leadsPorData[key] || {total:0, convertidos:0, faturamento:0, setores:[]};
            var slug = mp.slug || slugPorCamp[camp] || '';
-           if (!campRank[key]) campRank[key] = {campanha:camp, data:dataDisp, tCli:0, tRec:0, leads:0, recup:0, fat:0, setores:{}, slug:slug};
+           if (!campRank[key]) campRank[key] = {campanha:camp, data:dataDisp, tCli:0, tRec:0, leads:0, convertidos:0, fat:0, setores:{}, slug:slug};
           campRank[key].tCli += parseFloat(mp.totalClientes) || 0;
           campRank[key].tRec += parseFloat(mp.receberam) || 0;
           campRank[key].leads += l.total || 0;
-          campRank[key].recup += l.recup || 0;
+          campRank[key].convertidos += l.convertidos || 0;
           campRank[key].fat += l.faturamento || 0;
           (l.setores||[]).forEach(function(s){ campRank[key].setores[s]=true; });
         }
         var campArr = Object.keys(campRank).map(function(k){return campRank[k];}).sort(function(a,b){return b.fat - a.fat;});
         campArr.forEach(function(c, i) {
-          var pct = c.leads > 0 ? (c.recup / c.leads * 100).toFixed(2) : '0.00';
+          var pct = c.leads > 0 ? (c.convertidos / c.leads * 100).toFixed(2) : '0.00';
           var bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
           var rankHtml = '';
           if (i === 0) rankHtml = '<span style="font-size:19px">\uD83E\uDD47</span>';
@@ -548,7 +556,7 @@
             '<td class="text-right" style="color:#60a5fa;font-size:14px">' + (c.tCli || '—') + '</td>' +
             '<td class="text-right" style="color:#a78bfa;font-size:14px">' + (c.tRec || '—') + '</td>' +
             '<td class="text-right" style="color:#34d399;font-size:14px">' + c.leads + '</td>' +
-            '<td class="text-right" style="color:#34d399;font-size:14px">' + c.recup + '</td>' +
+            '<td class="text-right" style="color:#34d399;font-size:14px">' + c.convertidos + '</td>' +
             '<td class="text-right" style="color:#fbbf24;font-size:14px;font-weight:700">' + fmtCurr(c.fat) + '</td>' +
             '<td style="color:#f59e0b;font-size:14px">' + pct + '%</td></tr>';
           // Detail row (hidden)
@@ -569,9 +577,9 @@
           '<td class="text-right" style="font-weight:700">' + tCli + '</td>' +
           '<td class="text-right" style="font-weight:700">' + tRec + '</td>' +
           '<td class="text-right" style="font-weight:700;color:#34d399">' + tL + '</td>' +
-          '<td class="text-right" style="font-weight:700;color:#34d399">' + tR + '</td>' +
+          '<td class="text-right" style="font-weight:700;color:#34d399">' + tC + '</td>' +
           '<td class="text-right" style="font-weight:700;color:#fbbf24">' + fmtCurr(tFat) + '</td>' +
-          '<td style="font-weight:700;color:#f59e0b">' + (tL > 0 ? (tR / tL * 100).toFixed(2) : '0.00') + '%</td></tr>';
+          '<td style="font-weight:700;color:#f59e0b">' + (tL > 0 ? (tC / tL * 100).toFixed(2) : '0.00') + '%</td></tr>';
         h += '</tbody></table></div></div>';
         h += '<div class="chart-box">' +
           '<h2>' + icn('lightbulb',14) + ' Curiosidade <span class="sub">&rarr; Se todos os clientes tivessem recebido a mensagem</span></h2>' +
@@ -581,7 +589,7 @@
               '<div style="color:#6b7280;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:8px">Agora (parcial)</div>' +
               '<div style="font-size:15px;color:#9ca3af;line-height:2">' +
                 '<span style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</span> receberam<br>' +
-                '\u2192 <span style="color:#34d399;font-size:17px;font-weight:600">' + totalRecuperados + '</span> recuperados<br>' +
+                '\u2192 <span style="color:#34d399;font-size:17px;font-weight:600">' + totalConvertidos + '</span> convertidos<br>' +
                 '\u2192 <span style="color:#fbbf24;font-size:17px;font-weight:600">' + fmtCurr(totalValor) + '</span>' +
               '</div>' +
             '</div>' +
@@ -589,17 +597,17 @@
               '<div style="color:#f59e0b;font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:0.3px;margin-bottom:8px">Proje\u00E7\u00E3o (100%)</div>' +
               '<div style="font-size:15px;color:#9ca3af;line-height:2">' +
                 '<span style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</span> receberiam<br>' +
-                '\u2192 <span style="color:#34d399;font-weight:700;font-size:17px">' + projRecup.toLocaleString('pt-BR') + '</span> recuperados <span style="color:#34d399;font-size:13px">(+' + difRecup.toLocaleString('pt-BR') + ')</span><br>' +
+                '\u2192 <span style="color:#34d399;font-weight:700;font-size:17px">' + projRecup.toLocaleString('pt-BR') + '</span> convertidos <span style="color:#34d399;font-size:13px">(+' + difRecup.toLocaleString('pt-BR') + ')</span><br>' +
                 '\u2192 <span style="color:#fbbf24;font-weight:700;font-size:17px">' + fmtCurr(projFat) + '</span> <span style="color:#fbbf24;font-size:13px">(+' + fmtCurr(difFat) + ')</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
           '<div style="margin-top:14px;padding:14px 16px;border-radius:6px;background:rgba(0,0,0,0.15);font-size:14px;color:#9ca3af;line-height:1.9">' +
             'Como foi calculado:<br>' +
-            '1. Taxa de recupera\u00E7\u00E3o: <b style="color:#34d399">' + totalRecuperados + '</b> recup \u00F7 <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> receberam = <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b><br>' +
-            '2. Proje\u00E7\u00E3o de recuperados: <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> totais \u00D7 <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recuperados<br>' +
-            '3. Ticket m\u00E9dio atual por recuperado: <b style="color:#fbbf24">' + fmtCurr(totalValor) + '</b> \u00F7 <b style="color:#34d399">' + totalRecuperados + '</b> recup = <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b><br>' +
-            '4. Proje\u00E7\u00E3o de faturamento: <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> recup \u00D7 <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b> = <b style="color:#fbbf24">' + fmtCurr(projFat) + '</b>' +
+            '1. Taxa de convers\u00E3o: <b style="color:#34d399">' + totalConvertidos + '</b> convertidos \u00F7 <b style="color:#a78bfa">' + tRec.toLocaleString('pt-BR') + '</b> receberam = <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b><br>' +
+            '2. Proje\u00E7\u00E3o de convertidos: <b style="color:#60a5fa">' + tCli.toLocaleString('pt-BR') + '</b> totais \u00D7 <b style="color:#f59e0b">' + txRec.toFixed(2) + '%</b> = <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> convertidos<br>' +
+            '3. Ticket m\u00E9dio atual por convertido: <b style="color:#fbbf24">' + fmtCurr(totalValor) + '</b> \u00F7 <b style="color:#34d399">' + totalConvertidos + '</b> conv = <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b><br>' +
+            '4. Proje\u00E7\u00E3o de faturamento: <b style="color:#34d399">' + projRecup.toLocaleString('pt-BR') + '</b> conv \u00D7 <b style="color:#60a5fa">' + fmtCurr(ticketMedio) + '</b> = <b style="color:#fbbf24">' + fmtCurr(projFat) + '</b>' +
           '</div></div></div>';
       }
 
