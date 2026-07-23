@@ -7,7 +7,6 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Dashboard de Campanhas</title>
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -15,8 +14,6 @@
     header{background:linear-gradient(135deg,#11131c,#1a1d27);border-bottom:1px solid #1e1b4b;padding:20px 32px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
     header h1{font-size:24px;font-weight:700;background:linear-gradient(135deg,#f59e0b,#fb923c,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px}
     .container{max-width:1200px;margin:0 auto;padding:24px 32px}
-    .upload-area{display:block;border:2px dashed #1e1b4b;border-radius:16px;padding:56px;text-align:center;background:linear-gradient(135deg,#11131c,#1a1d27);cursor:pointer;transition:.3s}
-    .upload-area:hover{border-color:#f59e0b;background:linear-gradient(135deg,#151830,#1e2030)}
     .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
     .card{background:linear-gradient(135deg,#11131c,#1a1d27);border:1px solid #1e1b4b;border-radius:14px;padding:20px 24px;transition:.2s}
@@ -49,31 +46,17 @@
     .tab-month.active{color:#a78bfa;background:transparent;border:none;border-bottom:2.5px solid #a78bfa;border-radius:0;padding:6px 14px 3.5px;box-shadow:none}
     footer{text-align:center;padding:16px 20px;font-size:13px;color:#4a4d6e;border-top:1px solid #1e1b4b;margin-top:24px}
     footer strong{color:#6b7280}
-    .btn-token{background:transparent;border:1px solid #4a4d6e;color:#9ca3af;padding:4px 10px;border-radius:6px;font-size:10px;cursor:pointer;display:none}
-    .btn-token:hover{border-color:#f59e0b;color:#fcd34d}
-    .input-token{width:120px;background:#11131c;border:1px solid #1e1b4b;border-radius:6px;padding:4px 8px;color:#e1e7ef;font-size:11px;outline:none;display:none}
   </style>
 </head>
 <body>
   <header>
     <a href="https://echevarria-bi.github.io/" style="color:#fcd34d;text-decoration:none;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;margin-right:16px;white-space:nowrap;padding:8px 18px;border:1.5px solid rgba(245,158,11,0.3);border-radius:10px;background:linear-gradient(135deg,rgba(120,53,15,.25),rgba(69,25,3,.2));transition:all .3s;letter-spacing:.3px" onmouseover="this.style.borderColor='#f59e0b';this.style.boxShadow='0 0 20px rgba(245,158,11,0.15)'" onmouseout="this.style.borderColor='rgba(245,158,11,0.3)';this.style.boxShadow='none'">&#8592; Menu</a>
     <h1>&#128222; Dashboard de Campanhas</h1>
-    <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span id="statusFile" style="font-size:11px;color:#6b7280"></span>
-      <span id="tokenStatus" style="font-size:10px;color:#6b7280"></span>
-      <input type="password" id="tokenInput" class="input-token" placeholder="Token GitHub" onkeydown="if(event.key==='Enter'){setToken(this.value);this.style.display='none'}">
-      <button onclick="document.getElementById('tokenInput').style.display='inline-block';document.getElementById('tokenInput').focus()" class="btn-token" id="btnToken">&#128274; Token</button>
-      <button onclick="novoArquivo()" style="background:#1e1b4b;border:1px solid #78350f;color:#fcd34d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:none" id="btnNovoArquivo">&#128193; Novo arquivo</button>
-    </div>
   </header>
   <div class="container" id="app">
-    <div style="position:relative;width:100%">
-      <input type="file" id="inputArquivo" accept=".xlsx,.xls" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:5;font-size:0" onchange="processFile(this.files[0])">
-      <div class="upload-area" id="areaInicial" ondragover="this.classList.add('dragover');event.preventDefault()" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');if(event.dataTransfer.files[0])processFile(event.dataTransfer.files[0])">
-        <div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div>
-        <div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div>
-        <div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>
-      </div>
+    <div id="loadingArea" style="text-align:center;padding:60px">
+      <div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div>
+      <div style="color:#fcd34d;font-size:14px">Carregando dados...</div>
     </div>
   </div>
   <div id="dashContent"></div>
@@ -106,118 +89,10 @@
       el.style.display = (el.style.display === 'none' || !el.style.display) ? 'table-row' : 'none';
     }
 
-    function processBuffer(buf, nome) {
-      try {
-        var data = new Uint8Array(buf);
-        var wb = XLSX.read(data, {type:'array'});
-        _dados = parseCampanhas(wb);
-        renderCampanhas();
-        document.getElementById('areaInicial').parentElement.style.display = 'none';
-        document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
-        var now = new Date();
-        document.getElementById('footer').style.display = 'block';
-        document.getElementById('footer').innerHTML = '<strong>' + nome + '</strong> &middot; ' + now.toLocaleDateString('pt-BR') + ' &agrave;s ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-        document.getElementById('statusFile').textContent = 'Carregado';
-        document.getElementById('statusFile').style.color = '#34d399';
-        setTimeout(function() { document.getElementById('statusFile').textContent = ''; }, 3000);
-        mostrarTokenSeNecessario();
-        saveRemoteData(_dados, _campInfo, nome).then(function(ok) {
-          if (ok) {
-            document.getElementById('tokenStatus').textContent = 'Salvo no repositório';
-            document.getElementById('tokenStatus').style.color = '#34d399';
-            setTimeout(function() { document.getElementById('tokenStatus').textContent = 'Dados remotos'; }, 4000);
-          }
-        });
-      } catch(err) {
-        document.getElementById('areaInicial').innerHTML = '<div style="font-size:40px;margin-bottom:8px">&#9888;</div><div style="color:#f87171;font-size:14px">Erro: ' + err.message + '</div><div style="color:#4a4d6e;font-size:12px;margin-top:4px;cursor:pointer" onclick="document.getElementById(\'inputArquivo\').click()">Clique para tentar novamente</div>';
-      }
-    }
-
-    function processFile(file) {
-      if (!file) return;
-      document.getElementById('areaInicial').innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Processando ' + file.name + '...</div>';
-      var reader = new FileReader();
-      reader.onload = function(ev) { processBuffer(ev.target.result, file.name); };
-      reader.readAsArrayBuffer(file);
-    }
-
-    function autoLoad() {
-      var area = document.getElementById('areaInicial');
-      area.innerHTML = '<div style="color:#f59e0b;margin-bottom:6px"><span class="spinner"></span></div><div style="color:#fcd34d;font-size:14px">Carregando dados...</div>';
-      fetch('RELATÓRIO - CAMPANHAS.xlsx').then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.arrayBuffer();
-      }).then(function(buf) {
-        processBuffer(buf, 'RELATÓRIO - CAMPANHAS.xlsx');
-      }).catch(function() {
-        area.innerHTML = '<div style="font-size:40px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>';
-        mostrarTokenSeNecessario();
-      });
-    }
-
-    function novoArquivo() {
-      document.getElementById('areaInicial').parentElement.style.display = 'block';
-      document.getElementById('areaInicial').innerHTML = '<div style="font-size:48px;margin-bottom:12px;opacity:.5">&#128194;</div><div style="font-size:16px;color:#9ca3af;font-weight:500">Clique para selecionar o arquivo</div><div style="font-size:13px;color:#4a4d6e;margin-top:4px">RELATÓRIO - CAMPANHAS.xlsx</div>';
-      document.getElementById('dashContent').innerHTML = '';
-      document.getElementById('footer').style.display = 'none';
-      document.getElementById('btnNovoArquivo').style.display = 'none';
-      _dados = null;
-      _campInfo = {};
-      document.getElementById('tokenStatus').textContent = '';
-      mostrarTokenSeNecessario();
-    }
-
-    function getToken() { try { return localStorage.getItem('campToken') || ''; } catch(e) { return ''; } }
-
-    function setToken(t) {
-      if (!t) return;
-      try { localStorage.setItem('campToken', t); } catch(e) {}
-      document.getElementById('tokenStatus').textContent = 'Token salvo';
-      document.getElementById('tokenStatus').style.color = '#34d399';
-      document.getElementById('btnToken').style.display = 'none';
-    }
-
     function fetchRemoteData() {
       return fetch('https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/' + GH_FILE + '?t=' + Date.now())
         .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
         .catch(function() { return null; });
-    }
-
-    function saveRemoteData(rows, campInfo, fileName) {
-      var token = getToken();
-      if (!token) {
-        document.getElementById('tokenStatus').textContent = 'Token não configurado';
-        document.getElementById('tokenStatus').style.color = '#f87171';
-        document.getElementById('btnToken').style.display = 'inline-flex';
-        return Promise.resolve(false);
-      }
-      var payload = { rows: rows, campInfo: campInfo, updatedAt: new Date().toISOString(), fileName: fileName || '' };
-      var content = JSON.stringify(payload, null, 2);
-      var base64 = btoa(unescape(encodeURIComponent(content)));
-      var url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_FILE;
-      document.getElementById('tokenStatus').textContent = 'Salvando...';
-      document.getElementById('tokenStatus').style.color = '#f59e0b';
-      return fetch(url + '?ref=' + GH_BRANCH, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' } })
-        .then(function(r) {
-          if (r.status === 404) return null;
-          if (!r.ok) return r.json().then(function(j) { throw new Error(JSON.stringify(j)); });
-          return r.json();
-        })
-        .then(function(existing) {
-          var body = { message: 'Atualização ' + (fileName || '') + ' - ' + new Date().toLocaleString('pt-BR'), content: base64, branch: GH_BRANCH };
-          if (existing && existing.sha) body.sha = existing.sha;
-          return fetch(url, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
-        })
-        .then(function(r) {
-          if (!r.ok) return r.json().then(function(j) { throw new Error(JSON.stringify(j)); });
-          return true;
-        })
-        .catch(function(err) {
-          console.error('saveRemoteData error:', err);
-          document.getElementById('tokenStatus').textContent = err.message;
-          document.getElementById('tokenStatus').style.color = '#f87171';
-          return false;
-        });
     }
 
     function carregarDadosRemoto() {
@@ -226,65 +101,14 @@
           _dados = data.rows;
           _campInfo = data.campInfo || {};
           renderCampanhas();
-          document.getElementById('areaInicial').parentElement.style.display = 'none';
-          document.getElementById('btnNovoArquivo').style.display = 'inline-flex';
+          document.getElementById('loadingArea').style.display = 'none';
           var dt = new Date(data.updatedAt);
           document.getElementById('footer').style.display = 'block';
           document.getElementById('footer').innerHTML = 'Última atualização: ' + dt.toLocaleDateString('pt-BR') + ' às ' + dt.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) + ' &middot; <strong>' + (data.fileName || '') + '</strong>';
-          if (getToken()) document.getElementById('btnToken').style.display = 'none';
-          else document.getElementById('btnToken').style.display = 'inline-flex';
-          document.getElementById('tokenStatus').textContent = 'Dados remotos';
-          document.getElementById('tokenStatus').style.color = '#6b7280';
         } else {
-          autoLoad();
+          document.getElementById('loadingArea').innerHTML = '<div style="font-size:40px;margin-bottom:12px;opacity:.5">&#9888;</div><div style="color:#f87171;font-size:14px">Nenhum dado disponível</div><div style="color:#6b7280;font-size:12px;margin-top:8px">Execute atualizar.bat para gerar os dados</div>';
         }
       });
-    }
-
-    function mostrarTokenSeNecessario() {
-      if (!getToken()) document.getElementById('btnToken').style.display = 'inline-flex';
-    }
-
-    function parseCampanhas(wb) {
-      // Read campaign info from per-campaign sheets
-      _campInfo = {};
-      wb.SheetNames.forEach(function(s) {
-        if (s === 'Dados Geral' || s === 'Resumo por RCA' || s === 'Planilha1') return;
-        var cws = wb.Sheets[s];
-        var crows = XLSX.utils.sheet_to_json(cws, {header:1, defval:''});
-        _campInfo[s] = {
-          texto: (crows[4] && crows[4][0]) ? String(crows[4][0]).trim() : '',
-          publico: (crows[8] && crows[8][0]) ? String(crows[8][0]).trim() : ''
-        };
-      });
-
-      // Read main data from Dados Geral sheet
-      var ws = wb.Sheets['Dados Geral'];
-      if (!ws) throw new Error('Aba "Dados Geral" não encontrada no arquivo.');
-      var raw = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
-      var rows = [];
-      for (var ri = 1; ri < raw.length; ri++) {
-        var r = raw[ri];
-        if (!r || !r[0] || !r[4]) continue;
-        rows.push({
-          id: r[0],
-          resposta: String(r[1]).trim(),
-          cod: String(r[2]).trim(),
-          vendedor: String(r[3]).trim(),
-          setor: String(r[4]).trim(),
-          regiao: String(r[5]).trim(),
-          supervisor: String(r[6]).trim(),
-          campanha: String(r[7]).trim(),
-          data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : String(r[8]).trim(),
-          compra: r[9],
-          valor: parseFloat(r[10]) || 0,
-          campanhaM: String(r[11]).trim(),
-          dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : String(r[12]).trim(),
-          totalClientes: r[13],
-          receberam: r[14]
-        });
-      }
-      return rows;
     }
 
     function fmtCurr(v) { if (v==null||isNaN(v)) return '-'; return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -614,7 +438,6 @@
       return h;
     }
 
-    // Try remote data first, fallback to autoLoad
     carregarDadosRemoto();
   </script>
   <style>
