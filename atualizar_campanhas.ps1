@@ -43,7 +43,7 @@ Write-Host "  data.json atualizado!" -ForegroundColor Green
 Write-Host ""
 Write-Host "[3/4] Enviando para GitHub..." -ForegroundColor Cyan
 Push-Location $camDir
-git add data.json
+git add data.json "RELATÓRIO - CAMPANHAS.xlsx"
 $commitMsg = "feat: atualizacao manual $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
 git commit -m $commitMsg 2>&1 | Out-Null
 $pushResult = git push 2>&1

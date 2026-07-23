@@ -20,8 +20,7 @@ echo OK!
 echo.
 
 echo [2/3] Enviando para GitHub...
-cd /d "%CAMDIR%"
-git add data.json
+git add data.json "RELATÓRIO - CAMPANHAS.xlsx"
 git commit -m "feat: atualizacao manual %date% %time%" 2>nul
 git push
 echo.
