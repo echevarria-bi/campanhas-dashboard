@@ -1,0 +1,36 @@
+========================================
+  Atualizador de Campanhas
+========================================
+
+[1/3] Enriquecendo dados...
+Lendo base_8026_2026.xlsx...
+Base 8026: 155504 pedidos, 6665 CODCLIs indexados
+Lendo RELATÓRIO - CAMPANHAS.xlsx...
+Dados Geral: 260 linhas
+Enriquecendo dados com faturamento da base 8026...
+Resultados:
+  Total linhas: 260
+  CODCLI encontrado na base: 209
+  Com faturamento > 0: 79
+  CODCLI não encontrado: 51
+
+data.json salvo: C:\Users\mar\OneDrive - SPADER DISTRIBUIDORA DE ALIMENTOS L\Área de Trabalho\dashboards\campanhas\data.json
+Total rows: 260
+
+=== Resumo por Campanha ===
+AÇAÍ | 45-120 DIAS | TELEVENDAS: 12 clientes, 3 recuperados, R$ 557.35
+CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS: 3 clientes, 1 recuperados, R$ 926.80
+COPA | 20-44 DIAS | REPRESENTANTES: 22 clientes, 14 recuperados, R$ 27020.35
+DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS: 51 clientes, 13 recuperados, R$ 6663.91
+PROSPECÇÃO CNPJ | 45-365 DIAS | TELEVENDAS: 9 clientes, 1 recuperados, R$ 987.00
+CAMPANHA BRASIL VENCEU | 20-44 DIAS | REPRESENTANTES: 1 clientes, 0 recuperados, R$ 0.00
+VOUCHER | 45-365 DIAS | TELEVENDAS: 33 clientes, 7 recuperados, R$ 2150.36
+VOLTE A COMPRAR | 20-44 DIAS | REPRESENTANTES: 22 clientes, 13 recuperados, R$ 7250.60
+CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES: 16 clientes, 13 recuperados, R$ 18651.03
+CAMPANHA AÇAÍ | 20-44 DIAS | TELEVENDAS: 10 clientes, 1 recuperados, R$ 270.65
+CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS: 16 clientes, 0 recuperados, R$ 0.00
+CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS: 8 clientes, 0 recuperados, R$ 0.00
+CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS: 4 clientes, 0 recuperados, R$ 0.00
+CAMPANHA SUPER VOUCHER| 45-120 DIAS | TELEVENDAS: 16 clientes, 8 recuperados, R$ 5530.10
+CAMPANHA AÇAÍ| 40-120 DIAS | TELEVENDAS: 37 clientes, 2 recuperados, R$ 1509.60
+ne foi inesperado neste momento.
