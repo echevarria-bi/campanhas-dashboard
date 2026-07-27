@@ -315,7 +315,7 @@
         h += '<div style="flex:1;display:flex;flex-direction:column;gap:8px">';
         function cb(label, valor, bg, cor) { return '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:' + bg + '"><span style="color:#d1d5db;font-size:17px;font-weight:500">' + label + '</span><span style="color:' + cor + ';font-size:30px;font-weight:800">' + valor + '</span></div>'; }
         h += cb('Total Investido', fmtCurr(custoTotal), 'rgba(248,113,113,0.07)', '#f87171');
-        h += cb('Lucro L\u00EDquido', fmtCurr(lucroLiquido), 'rgba(52,211,153,0.07)', lucroLiquido >= 0 ? '#34d399' : '#f87171');
+        h += cb('Faturamento', fmtCurr(fatGlobal), 'rgba(52,211,153,0.07)', '#34d399');
         h += cb('Ticket M\u00E9dio', fmtCurr(ticketMedio), 'rgba(96,165,250,0.07)', '#60a5fa');
         h += cb('Custo por Convertido', fmtCurr(custoPorConvertido), 'rgba(167,139,250,0.07)', '#a78bfa');
         h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-radius:12px;flex:1;background:rgba(52,211,153,0.07)"><span style="color:#d1d5db;font-size:17px;font-weight:500">Convertidos</span><span style="color:#34d399;font-size:30px;font-weight:800">' + totalConvertidos.toLocaleString('pt-BR') + '</span></div>';
