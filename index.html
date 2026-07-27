@@ -210,8 +210,12 @@
         totalValor += l.faturamento;
       });
 
+      var totalReceberamCards = 0;
+      Object.keys(datasMP).forEach(function(k) { totalReceberamCards += parseFloat(datasMP[k].receberam) || 0; });
+
       var h = '<div class="cards">';
       h += '<div class="card"><div class="label">Contatos</div><div class="value" style="color:#60a5fa">' + totalLeads + '</div></div>';
+      h += '<div class="card"><div class="label">Receberam</div><div class="value" style="color:#a78bfa">' + totalReceberamCards.toLocaleString('pt-BR') + '</div></div>';
       h += '<div class="card"><div class="label">Convers\u00F5es</div><div class="value" style="color:#34d399">' + totalConvertidos + '</div></div>';
       h += '<div class="card"><div class="label">Faturamento</div><div class="value" style="color:#fbbf24">' + fmtCurr(totalValor) + '</div></div>';
       h += '<div class="card"><div class="label">Taxa Convers\u00E3o</div><div class="value" style="color:#a78bfa">' + (totalLeads > 0 ? (totalConvertidos / totalLeads * 100).toFixed(1) : '0') + '%</div></div>';

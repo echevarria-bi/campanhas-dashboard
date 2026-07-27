@@ -103,7 +103,7 @@ var enriched = 0, notFound = 0, withFat = 0;
 
 for (var ri = 1; ri < dgRaw.length; ri++) {
   var r = dgRaw[ri];
-  if (!r || !r[0] || !r[4]) continue;
+  if (!r || !r[0]) continue;
 
   var codcli = String(r[0]).trim();
   var campaignDateSerial = r[8]; // DATA column (serial)
@@ -114,7 +114,7 @@ for (var ri = 1; ri < dgRaw.length; ri++) {
     resposta: String(r[1]).trim(),
     cod: String(r[2]).trim(),
     vendedor: String(r[3]).trim(),
-    setor: String(r[4]).trim(),
+    setor: String(r[4]).trim() || 'Todos',
     regiao: String(r[5]).trim(),
     supervisor: String(r[6]).trim(),
     campanha: String(r[7]).trim(),
