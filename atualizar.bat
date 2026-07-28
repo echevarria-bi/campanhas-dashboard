@@ -30,7 +30,7 @@ if %ERRORLEVEL% neq 0 (
 echo.
 
 echo [3/3] Resumo do data.json:
-node -e "var d=require('%CAMDIR%\\data.json');var c=d.rows.filter(r=>r.valor>0).length;var f=d.rows.reduce((s,r)=>s+r.valor,0);console.log('  Total contatos: '+d.rows.length);console.log('  Convertidos: '+c);console.log('  Faturamento: R\$ '+f.toFixed(2));"
+node -e "var d=require('./data.json');var c=d.rows.filter(r=>r.valor>0).length;var f=d.rows.reduce((s,r)=>s+r.valor,0);console.log('  Total contatos: '+d.rows.length);console.log('  Convertidos: '+c);console.log('  Faturamento: R\$ '+f.toFixed(2));"
 echo.
 echo Dashboard atualizado!
 pause
