@@ -63,7 +63,7 @@
   <footer id="footer" style="display:none"></footer>
 
   <script>
-    var _dados = null, _activeTab = 'geral', _campInfo = {};
+    var _dados = null, _activeTab = 'geral', _campInfo = {}, _slugMap = {};
     var GH_OWNER = 'echevarria-bi', GH_REPO = 'campanhas-dashboard', GH_FILE = 'data.json', GH_BRANCH = 'master';
 
     function limparNome(str) {
@@ -100,6 +100,7 @@
         if (data && data.rows && data.rows.length) {
           _dados = data.rows;
           _campInfo = data.campInfo || {};
+          _slugMap = data.slugMap || {};
           renderCampanhas();
           document.getElementById('loadingArea').style.display = 'none';
           var dt = new Date(data.updatedAt);
@@ -183,7 +184,7 @@
         if (!mr.campanhaM || !mr.dataN) continue;
         if (!matchMonth(mr.dataN, monthNum)) continue;
         var key = mr.dataN + '|' + mr.campanhaM;
-        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, slug: gerarSlug(mr.dataN, mr.campanhaM)};
+        if (!datasMP[key]) datasMP[key] = {totalClientes: mr.totalClientes, receberam: mr.receberam, slug: getSlug(mr.campanhaM) || gerarSlug(mr.dataN, mr.campanhaM)};
       }
 
       // Build leadsPorData grouped by data+campanha
@@ -261,14 +262,9 @@
         return da[2]-db[2] || da[1]-db[1] || da[0]-db[0] || (pa[1] < pb[1] ? -1 : pa[1] > pb[1] ? 1 : 0);
       });
 
-      // Build slug lookup by campaign name (from ALL data, not just current month)
-      var slugPorCamp = {};
-      for (var si = 0; si < dados.length; si++) {
-        var sd = dados[si];
-        if (!sd.campanhaM || !sd.dataN) continue;
-        var sk = sd.dataN + '|' + sd.campanhaM;
-        var sp = sk.split('|');
-        slugPorCamp[sp.slice(1).join('|')] = gerarSlug(sd.dataN, sd.campanhaM);
+      // Use pre-built slugMap from server, fall back to generated slug
+      function getSlug(campanhaName) {
+        return _slugMap[campanhaName] || '';
       }
 
       if (allKeys.length) {
@@ -358,7 +354,7 @@
           var camp = parts.length > 1 ? parts.slice(1).join('|') : '(sem campanha)';
           var mp = datasMP[key] || {};
           var l = leadsPorData[key] || {total:0, convertidos:0, faturamento:0, setores:[]};
-           var slug = mp.slug || slugPorCamp[camp] || '';
+           var slug = mp.slug || getSlug(camp) || '';
            if (!campRank[key]) campRank[key] = {campanha:camp, data:dataDisp, tCli:0, tRec:0, leads:0, convertidos:0, fat:0, setores:{}, slug:slug};
           campRank[key].tCli += parseFloat(mp.totalClientes) || 0;
           campRank[key].tRec += parseFloat(mp.receberam) || 0;

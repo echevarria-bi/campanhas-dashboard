@@ -159,11 +159,74 @@ console.log('  Com faturamento > 0: ' + withFat);
 console.log('  CODCLI não encontrado: ' + notFound);
 
 // ============================================================
-// 4. Salvar data.json atualizado
+// 4. Build slugMap: display name -> campInfo key (sheet name)
+// ============================================================
+var slugMap = {};
+var campInfoKeys = Object.keys(campInfo);
+
+for (var si = 0; si < rows.length; si++) {
+  var sr = rows[si];
+  if (!sr.campanhaM || !sr.dataN) continue;
+
+  var ds = sr.dataN.replace(/\//g, ''); // DDMMYYYY
+  var candidates = campInfoKeys.filter(function(k) {
+    return k.indexOf(ds) === 0;
+  });
+
+  if (candidates.length === 1) {
+    slugMap[sr.campanhaM] = candidates[0];
+  } else if (candidates.length > 1) {
+    // Disambiguate: match first significant word of campanhaM
+    var words = sr.campanhaM.replace('CAMPANHA ', '').split(/[\s|]+/);
+    var best = null;
+    for (var ci = 0; ci < candidates.length; ci++) {
+      var candLower = candidates[ci].toLowerCase();
+      for (var wi = 0; wi < words.length; wi++) {
+        var w = words[wi].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        if (w.length > 2 && candLower.indexOf(w) >= 0) {
+          best = candidates[ci];
+          break;
+        }
+      }
+      if (best) break;
+    }
+    if (best) {
+      slugMap[sr.campanhaM] = best;
+    }
+  }
+}
+
+// Manual overrides for campaigns that don't match automatically
+// FILÉ MEIO PEITO: no campInfo sheet, create entry manually
+if (!campInfo['27072026_FILEMEIOPEITO_TODOS']) {
+  campInfo['27072026_FILEMEIOPEITO_TODOS'] = {
+    texto: 'Olá! Aqui é da MAR Food Service! 👋 Estamos com condições especiais em FILÉ MEIO PEITO, válidas somente hoje! Quer saber quais são as ofertas? Responda a esta mensagem que eu te explico os próximos passos. 🚀',
+    publico: 'Todos'
+  };
+}
+slugMap['FILÉ MEIO PEITO | SEM COMPRA | TODOS'] = '27072026_FILEMEIOPEITO_TODOS';
+
+// CARNE MOÍDA II — manual mapping
+slugMap['CAMPANHA CARNE MOÍDA II| SEM COMPRA | TODOS'] = '23072026_CARNEMOIDA2_TODOS';
+
+// OURO DA TERRA — manual mapping (overrides auto if wrong)
+slugMap['OURO DA TERRA | SEM COMPRA | TODOS'] = '24072026_OURODATERRA_TODOS';
+
+// Fix auto-mapped entries that were wrong
+slugMap['COPA | 20-44 DIAS | REPRESENTANTES'] = '24062026_COPA_RP_20_44';
+slugMap['CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS'] = '23062026_BATATA_TV_45_120';
+slugMap['CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES'] = '06072026_ACAI_RP_20_44';
+slugMap['CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS'] = '08072026_CNPJ_AT_20_44';
+slugMap['CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS'] = '08072026_CNPJ_TV_45_400';
+slugMap['CAMPANHA FECHAMENTO DO MÊS | 45-89 DIAS | TELEVENDAS'] = '29062026_FECHAMENTO_TV_45_89';
+
+// ============================================================
+// 5. Salvar data.json atualizado
 // ============================================================
 var output = {
   rows: rows,
   campInfo: campInfo,
+  slugMap: slugMap,
   updatedAt: new Date().toISOString(),
   fileName: camFile
 };
