@@ -120,11 +120,11 @@ for (var ri = 1; ri < dgRaw.length; ri++) {
     campanha: String(r[7]).trim(),
     data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : String(r[8]).trim(),
     compra: r[9],
-    valor: parseFloat(r[10]) || 0,
-    campanhaM: String(r[11]).trim(),
-    dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : String(r[12]).trim(),
-    totalClientes: r[13],
-    receberam: r[14]
+    valor: parseFloat(r[9]) || 0,
+    campanhaM: String(r[10]).trim(),
+    dataN: typeof r[11] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[11]) : String(r[11]).trim(),
+    totalClientes: r[12],
+    receberam: r[13]
   };
 
   // Look up faturamento for this CODCLI after campaign date
