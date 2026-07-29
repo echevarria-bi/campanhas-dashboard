@@ -215,7 +215,7 @@
       "campanha": "COPA | 20-44 DIAS | REPRESENTANTES",
       "data": "24/06/2026",
       "compra": "Sim",
-      "valor": 634.44,
+      "valor": 427.46,
       "campanhaM": "AÇAÍ | 45-120 DIAS | TELEVENDAS",
       "dataN": "03/07/2026",
       "totalClientes": 986,
@@ -4941,7 +4941,7 @@
       "campanha": "CAMPANHA CARNE MOÍDA II| SEM COMPRA | TODOS",
       "data": "23/07/2026",
       "compra": "Sim",
-      "valor": 1726.67,
+      "valor": 1532.18,
       "campanhaM": "",
       "dataN": "",
       "totalClientes": "",
@@ -7517,6 +7517,6 @@
     "OURO DA TERRA | SEM COMPRA | TODOS": "24072026_OURODATERRA_TODOS",
     "FILÉ MEIO PEITO | SEM COMPRA | TODOS": "27072026_FILEMEIOPEITO_TODOS"
   },
-  "updatedAt": "2026-07-29T12:10:27.844Z",
+  "updatedAt": "2026-07-29T17:32:30.880Z",
   "fileName": "RELATÓRIO  - CAMPANHAS.xlsx"
 }
