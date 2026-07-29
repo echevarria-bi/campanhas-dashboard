@@ -12,10 +12,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "VOUCHER | 45-89 DIAS | TELEVENDAS",
-      "dataN": "10/06/2026",
-      "totalClientes": 1539,
-      "receberam": 643
+      "campanhaM": "46183",
+      "dataN": "18/03/1904",
+      "totalClientes": 643,
+      "receberam": "10062026_VOUCHER_TV_45_89"
     },
     {
       "id": 28483,
@@ -29,10 +29,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "BATATAS | 45-120 DIAS | TELEVENDAS",
-      "dataN": "18/06/2026",
-      "totalClientes": 3989,
-      "receberam": 1269
+      "campanhaM": "46191",
+      "dataN": "02/12/1910",
+      "totalClientes": 1269,
+      "receberam": "18062026_BATATAS_TV_45_120"
     },
     {
       "id": 31773,
@@ -46,10 +46,10 @@
       "data": "22/06/2026",
       "compra": "Sim",
       "valor": 165.8,
-      "campanhaM": "AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "22/06/2026",
-      "totalClientes": 333,
-      "receberam": 160
+      "campanhaM": "46195",
+      "dataN": "28/11/1900",
+      "totalClientes": 160,
+      "receberam": "22062026_ACAI_TV_45_120"
     },
     {
       "id": 34108,
@@ -63,10 +63,10 @@
       "data": "22/06/2026",
       "compra": "Sim",
       "valor": 215.8,
-      "campanhaM": "CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS",
-      "dataN": "23/06/2026",
-      "totalClientes": 897,
-      "receberam": 301
+      "campanhaM": "46196",
+      "dataN": "15/06/1902",
+      "totalClientes": 301,
+      "receberam": "23062026_BATATA_TV_45_120"
     },
     {
       "id": 38271,
@@ -80,10 +80,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "COPA | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "24/06/2026",
-      "totalClientes": 370,
-      "receberam": 183
+      "campanhaM": "46197",
+      "dataN": "04/01/1901",
+      "totalClientes": 183,
+      "receberam": "24062026_COPA_RP_20_44"
     },
     {
       "id": 39696,
@@ -97,10 +97,10 @@
       "data": "22/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "25/06/2026",
-      "totalClientes": 1164,
-      "receberam": 812
+      "campanhaM": "46198",
+      "dataN": "09/03/1903",
+      "totalClientes": 812,
+      "receberam": "25062026_DIADOACAI_TV_45_120"
     },
     {
       "id": 42764,
@@ -114,10 +114,10 @@
       "data": "22/06/2026",
       "compra": "Sim",
       "valor": 163.75,
-      "campanhaM": "DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "26/06/2026",
-      "totalClientes": 738,
-      "receberam": 430
+      "campanhaM": "46199",
+      "dataN": "07/01/1902",
+      "totalClientes": 430,
+      "receberam": "26062026_DIADOACAI_TV_45_120"
     },
     {
       "id": 39025,
@@ -131,10 +131,10 @@
       "data": "23/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "CAMPANHA FECHAMENTO DO MÊS | 45-89 DIAS | TELEVENDAS",
-      "dataN": "29/06/2026",
-      "totalClientes": 77,
-      "receberam": 31
+      "campanhaM": "46202",
+      "dataN": "17/03/1900",
+      "totalClientes": 31,
+      "receberam": "29062026_FECHAMENTO_TV_45_89"
     },
     {
       "id": 40089,
@@ -148,10 +148,10 @@
       "data": "23/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "PROSPECÇÃO CNPJ | 45-365 DIAS | TELEVENDAS",
-      "dataN": "30/06/2026",
-      "totalClientes": 2441,
-      "receberam": 880
+      "campanhaM": "46203",
+      "dataN": "06/09/1906",
+      "totalClientes": 880,
+      "receberam": "30062026_PROSPECCAO_TV_45_365"
     },
     {
       "id": 42866,
@@ -165,10 +165,10 @@
       "data": "23/06/2026",
       "compra": "Sim",
       "valor": 926.8,
-      "campanhaM": "CAMPANHA BRASIL VENCEU | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "30/06/2026",
-      "totalClientes": 984,
-      "receberam": 314
+      "campanhaM": "46203",
+      "dataN": "10/09/1902",
+      "totalClientes": 314,
+      "receberam": "30062026_BRASILVENC_RP_20_44"
     },
     {
       "id": 2738,
@@ -182,10 +182,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 475.09,
-      "campanhaM": "VOUCHER | 45-365 DIAS | TELEVENDAS",
-      "dataN": "01/07/2026",
-      "totalClientes": 1395,
-      "receberam": 742
+      "campanhaM": "46204",
+      "dataN": "26/10/1903",
+      "totalClientes": 742,
+      "receberam": "01072026_VOUCHER_TV_45_365"
     },
     {
       "id": 2753,
@@ -199,10 +199,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 1088,
-      "campanhaM": "VOLTE A COMPRAR | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "02/07/2026",
-      "totalClientes": 963,
-      "receberam": 406
+      "campanhaM": "46205",
+      "dataN": "20/08/1902",
+      "totalClientes": 406,
+      "receberam": "02072026_VOLTEACOMP_RP_20_44"
     },
     {
       "id": 7862,
@@ -216,10 +216,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 427.46,
-      "campanhaM": "AÇAÍ | 45-120 DIAS | TELEVENDAS",
-      "dataN": "03/07/2026",
-      "totalClientes": 986,
-      "receberam": 358
+      "campanhaM": "46206",
+      "dataN": "12/09/1902",
+      "totalClientes": 358,
+      "receberam": "03072026_ACAI_TV_45_120"
     },
     {
       "id": 15571,
@@ -233,10 +233,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 350.75,
-      "campanhaM": "CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES",
-      "dataN": "06/07/2026",
-      "totalClientes": 904,
-      "receberam": 328
+      "campanhaM": "46209",
+      "dataN": "22/06/1902",
+      "totalClientes": 328,
+      "receberam": "06072026_ACAI_RP_20_44"
     },
     {
       "id": 16379,
@@ -250,10 +250,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 919.31,
-      "campanhaM": "CAMPANHA AÇAÍ | 20-44 DIAS | TELEVENDAS",
-      "dataN": "06/07/2026",
-      "totalClientes": 1436,
-      "receberam": 628
+      "campanhaM": "46209",
+      "dataN": "06/12/1903",
+      "totalClientes": 628,
+      "receberam": "06072026_ACAI_TV_20_44"
     },
     {
       "id": 24553,
@@ -267,10 +267,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 561.78,
-      "campanhaM": "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS",
-      "dataN": "07/07/2026",
-      "totalClientes": 3561,
-      "receberam": 1558
+      "campanhaM": "46210",
+      "dataN": "30/09/1909",
+      "totalClientes": 1558,
+      "receberam": "07072026_CNPJ_TV_44_365"
     },
     {
       "id": 27951,
@@ -284,10 +284,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 19380.6,
-      "campanhaM": "CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS",
-      "dataN": "08/07/2026",
-      "totalClientes": 1100,
-      "receberam": 312
+      "campanhaM": "46211",
+      "dataN": "04/01/1903",
+      "totalClientes": 312,
+      "receberam": "08072026_CNPJ_AT_20_44"
     },
     {
       "id": 28658,
@@ -301,10 +301,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 179.77,
-      "campanhaM": "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS",
-      "dataN": "08/07/2026",
-      "totalClientes": 1692,
-      "receberam": 523
+      "campanhaM": "46211",
+      "dataN": "18/08/1904",
+      "totalClientes": 523,
+      "receberam": "08072026_CNPJ_TV_45_400"
     },
     {
       "id": 31819,
@@ -318,10 +318,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 0,
-      "campanhaM": "CAMPANHA SUPER VOUCHER| 45-120 DIAS | TELEVENDAS",
-      "dataN": "09/07/2026",
-      "totalClientes": 1166,
-      "receberam": 310
+      "campanhaM": "46212",
+      "dataN": "11/03/1903",
+      "totalClientes": 310,
+      "receberam": "09072026_SUPERVOUCH_TV_45_120"
     },
     {
       "id": 33133,
@@ -335,10 +335,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 1474.39,
-      "campanhaM": "CAMPANHA AÇAÍ| 40-120 DIAS | TELEVENDAS",
-      "dataN": "10/07/2026",
-      "totalClientes": 4057,
-      "receberam": 1223
+      "campanhaM": "46213",
+      "dataN": "08/02/1911",
+      "totalClientes": 1223,
+      "receberam": "10072026_ACAI_TV_40_120"
     },
     {
       "id": 33273,
@@ -352,10 +352,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "CAMPANHA CARNE MOÍDA II| SEM COMPRA | TODOS",
-      "dataN": "23/07/2026",
-      "totalClientes": 4344,
-      "receberam": 1235
+      "campanhaM": "46226",
+      "dataN": "22/11/1911",
+      "totalClientes": 1235,
+      "receberam": "23072026_CARNEMOIDA2_TODOS"
     },
     {
       "id": 35805,
@@ -369,10 +369,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 574,
-      "campanhaM": "OURO DA TERRA | SEM COMPRA | TODOS",
-      "dataN": "24/07/2026",
-      "totalClientes": 4296,
-      "receberam": 1060
+      "campanhaM": "46227",
+      "dataN": "05/10/1911",
+      "totalClientes": 1060,
+      "receberam": "24072026_OURODATERRA_TODOS"
     },
     {
       "id": 40618,
@@ -386,10 +386,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 797.04,
-      "campanhaM": "FILÉ MEIO PEITO | SEM COMPRA | TODOS",
-      "dataN": "27/07/2026",
-      "totalClientes": 4453,
-      "receberam": 2350
+      "campanhaM": "46230",
+      "dataN": "10/03/1912",
+      "totalClientes": 2350,
+      "receberam": "27062026_OURODATERRA_TODOS"
     },
     {
       "id": 41838,
@@ -403,10 +403,10 @@
       "data": "24/06/2026",
       "compra": "Não",
       "valor": 0,
-      "campanhaM": "",
-      "dataN": "",
-      "totalClientes": "",
-      "receberam": ""
+      "campanhaM": "46231",
+      "dataN": "16/11/1907",
+      "totalClientes": 859,
+      "receberam": "28072026_OLEODEALGODAO_TODOS"
     },
     {
       "id": 41914,
@@ -420,10 +420,10 @@
       "data": "24/06/2026",
       "compra": "Sim",
       "valor": 414.5,
-      "campanhaM": "",
-      "dataN": "",
-      "totalClientes": "",
-      "receberam": ""
+      "campanhaM": "46232",
+      "dataN": "10/09/1900",
+      "totalClientes": 129,
+      "receberam": "29072026_BRINDE_TODOS"
     },
     {
       "id": 42415,
@@ -7394,6 +7394,295 @@
       "dataN": "",
       "totalClientes": "",
       "receberam": ""
+    },
+    {
+      "id": 205,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 24433,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 46041,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 45707,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 41246,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Sim",
+      "valor": 750,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 10356,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 44938,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Externo",
+      "regiao": "Perdido",
+      "supervisor": "",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 38462,
+      "resposta": "Teve Interesse",
+      "cod": "9863",
+      "vendedor": "Rose - Nelvara",
+      "setor": "Externo",
+      "regiao": "Sul",
+      "supervisor": "Moizes",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 42480,
+      "resposta": "Teve Interesse",
+      "cod": "9886",
+      "vendedor": "Tatiana | Serra",
+      "setor": "Televendas",
+      "regiao": "Serra",
+      "supervisor": "Franciele",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 44225,
+      "resposta": "Teve Interesse",
+      "cod": "9839",
+      "vendedor": "Timoteo Hellwig",
+      "setor": "Externo",
+      "regiao": "Sul",
+      "supervisor": "Moizes",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 45975,
+      "resposta": "Teve Interesse",
+      "cod": "1393",
+      "vendedor": "Jose Carlos",
+      "setor": "Externo",
+      "regiao": "Serra",
+      "supervisor": "Jackson",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 44764,
+      "resposta": "Teve Interesse",
+      "cod": "9839",
+      "vendedor": "Timoteo Hellwig",
+      "setor": "Externo",
+      "regiao": "Sul",
+      "supervisor": "Moizes",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 28531,
+      "resposta": "Teve Interesse",
+      "cod": "1620",
+      "vendedor": "Leandro Moura",
+      "setor": "Externo",
+      "regiao": "Serra",
+      "supervisor": "Jackson",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Sim",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 45201,
+      "resposta": "Teve Interesse",
+      "cod": "1211",
+      "vendedor": "Cristielen Silva",
+      "setor": "Televendas",
+      "regiao": "Vale dos Sinos",
+      "supervisor": "Franciele",
+      "campanha": "OLEO DE ALGODAO 5,1LT | SEM COMPRA | TODOS",
+      "data": "28/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 43115,
+      "resposta": "Teve Interesse",
+      "cod": "1211",
+      "vendedor": "Cristielen Silva",
+      "setor": "Televendas",
+      "regiao": "Vale dos Sinos",
+      "supervisor": "Franciele",
+      "campanha": "BRINDE PRE-INATIVOS | TELEVENDAS | TODOS",
+      "data": "29/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 43022,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Perdido",
+      "regiao": "Perdido",
+      "supervisor": "Perdido",
+      "campanha": "BRINDE PRE-INATIVOS | TELEVENDAS | TODOS",
+      "data": "29/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
+    },
+    {
+      "id": 38402,
+      "resposta": "Sem Interesse",
+      "cod": "0",
+      "vendedor": "Perdido",
+      "setor": "Perdido",
+      "regiao": "Perdido",
+      "supervisor": "Perdido",
+      "campanha": "BRINDE PRE-INATIVOS | TELEVENDAS | TODOS",
+      "data": "29/07/2026",
+      "compra": "Não",
+      "valor": 0,
+      "campanhaM": "",
+      "dataN": "",
+      "totalClientes": "",
+      "receberam": ""
     }
   ],
   "campInfo": {
@@ -7489,34 +7778,30 @@
       "texto": "Olá! Aqui é da MAR Food Service! 👋 Estamos com condições especiais em produtos selecionados, válidas somente hoje! Quer saber quais são as ofertas? Responda a esta mensagem que eu te explico os próximos passos. 🚀",
       "publico": "Todos"
     },
+    "28072026_OLEODEALGODAO_TODOS": {
+      "texto": "Olá! Aqui é da MAR Food Service! 👋 Estamos com condições especiais em produtos selecionados, válidas somente hoje! Quer saber quais são as ofertas? Responda a esta mensagem que eu te explico os próximos passos. 🚀",
+      "publico": "Todos"
+    },
+    "29072026_BRINDE_TODOS": {
+      "texto": "Olá! Aqui é da MAR Food Service! 👋 Estamos com condições especiais em produtos selecionados, válidas somente hoje! Quer saber quais são as ofertas? Responda a esta mensagem que eu te explico os próximos passos. 🚀",
+      "publico": "Todos"
+    },
     "27072026_FILEMEIOPEITO_TODOS": {
       "texto": "Olá! Aqui é da MAR Food Service! 👋 Estamos com condições especiais em FILÉ MEIO PEITO, válidas somente hoje! Quer saber quais são as ofertas? Responda a esta mensagem que eu te explico os próximos passos. 🚀",
       "publico": "Todos"
     }
   },
   "slugMap": {
-    "VOUCHER | 45-89 DIAS | TELEVENDAS": "10062026_VOUCHER_TV_45_89",
-    "BATATAS | 45-120 DIAS | TELEVENDAS": "18062026_BATATAS_TV_45_120",
-    "AÇAÍ | 45-120 DIAS | TELEVENDAS": "03072026_ACAI_TV_45_120",
-    "CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS": "23062026_BATATA_TV_45_120",
-    "COPA | 20-44 DIAS | REPRESENTANTES": "24062026_COPA_RP_20_44",
-    "DIA DO AÇAÍ | 45-120 DIAS | TELEVENDAS": "26062026_DIADOACAI_TV_45_120",
-    "CAMPANHA FECHAMENTO DO MÊS | 45-89 DIAS | TELEVENDAS": "29062026_FECHAMENTO_TV_45_89",
-    "PROSPECÇÃO CNPJ | 45-365 DIAS | TELEVENDAS": "30062026_PROSPECCAO_TV_45_365",
-    "CAMPANHA BRASIL VENCEU | 20-44 DIAS | REPRESENTANTES": "30062026_BRASILVENC_RP_20_44",
-    "VOUCHER | 45-365 DIAS | TELEVENDAS": "01072026_VOUCHER_TV_45_365",
-    "VOLTE A COMPRAR | 20-44 DIAS | REPRESENTANTES": "02072026_VOLTEACOMP_RP_20_44",
-    "CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES": "06072026_ACAI_RP_20_44",
-    "CAMPANHA AÇAÍ | 20-44 DIAS | TELEVENDAS": "06072026_ACAI_TV_20_44",
-    "CAMPANHA CNPJ| 44-365 DIAS | TELEVENDAS": "07072026_CNPJ_TV_44_365",
-    "CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS": "08072026_CNPJ_AT_20_44",
-    "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS": "08072026_CNPJ_TV_45_400",
-    "CAMPANHA SUPER VOUCHER| 45-120 DIAS | TELEVENDAS": "09072026_SUPERVOUCH_TV_45_120",
-    "CAMPANHA AÇAÍ| 40-120 DIAS | TELEVENDAS": "10072026_ACAI_TV_40_120",
+    "FILÉ MEIO PEITO | SEM COMPRA | TODOS": "27072026_FILEMEIOPEITO_TODOS",
     "CAMPANHA CARNE MOÍDA II| SEM COMPRA | TODOS": "23072026_CARNEMOIDA2_TODOS",
     "OURO DA TERRA | SEM COMPRA | TODOS": "24072026_OURODATERRA_TODOS",
-    "FILÉ MEIO PEITO | SEM COMPRA | TODOS": "27072026_FILEMEIOPEITO_TODOS"
+    "COPA | 20-44 DIAS | REPRESENTANTES": "24062026_COPA_RP_20_44",
+    "CAMPANHA BATATA| 45-120 DIAS | TELEVENDAS": "23062026_BATATA_TV_45_120",
+    "CAMPANHA AÇAÍ | 20-44 DIAS | REPRESENTANTES": "06072026_ACAI_RP_20_44",
+    "CAMPANHA CNPJ| 20 -44 DIAS | ATIVOS": "08072026_CNPJ_AT_20_44",
+    "CAMPANHA CNPJ| 45-400 DIAS | TELEVENDAS": "08072026_CNPJ_TV_45_400",
+    "CAMPANHA FECHAMENTO DO MÊS | 45-89 DIAS | TELEVENDAS": "29062026_FECHAMENTO_TV_45_89"
   },
-  "updatedAt": "2026-07-29T17:32:30.880Z",
+  "updatedAt": "2026-07-29T17:55:02.069Z",
   "fileName": "RELATÓRIO  - CAMPANHAS.xlsx"
 }
