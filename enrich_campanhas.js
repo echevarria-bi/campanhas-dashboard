@@ -42,7 +42,7 @@ for (var i = 1; i < baseRaw.length; i++) {
   }
   var orderDate = serialToDate(r[2]);
   if (!codcliIndex[codcli]) codcliIndex[codcli] = [];
-  codcliIndex[codcli].push({ date: orderDate, fat: fat });
+  codcliIndex[codcli].push({ date: orderDate, fat: fat, prod: parseInt(String(r[4]).trim(), 10) });
   baseCount++;
 }
 console.log('Base 8026: ' + baseCount + ' pedidos, ' + Object.keys(codcliIndex).length + ' CODCLIs indexados');
@@ -93,6 +93,26 @@ function gerarSlug(dataStr, nomeCamp) {
 }
 
 // ============================================================
+// 2b. Mapeamento campanha -> produto (SKUs da base 8026)
+// ============================================================
+// OBS: compra do produto específico da campanha (apenas informativo, não entra no ranking)
+var PROD_CAMPANHAS = [
+  { test: function(n) { return n.indexOf('OLEO DE ALGODAO') >= 0; }, label: 'Óleo de Algodão 5,1LT', prods: [12417] },
+  { test: function(n) { return n.indexOf('FILÉ MEIO PEITO') >= 0; }, label: 'Filé Meio Peito', prods: [13746] },
+  { test: function(n) { return n.indexOf('CARNE MOÍDA') >= 0; }, label: 'Carne Moída II', prods: [1376, 12900, 10597] },
+  { test: function(n) { return n.indexOf('OURO DA TERRA') >= 0; }, label: 'Batata Ouro da Terra', prods: [13516] },
+  { test: function(n) { return n.indexOf('AÇAÍ') >= 0; }, label: 'Açaí', prods: [10937, 11979, 10938, 13283, 13246, 11022, 11980, 11472, 12336, 13196, 10933, 13228, 10936, 13482, 12605, 10926, 12609, 13135, 13263, 12604, 12006, 12004, 11117, 13194, 12603, 10934, 13247, 10935, 12076, 12607, 12077, 12957, 12005, 12606, 12958, 11831, 11387, 13766] },
+  { test: function(n) { return n.indexOf('BATATA') >= 0; }, label: 'Batata (fritas congeladas)', prods: [12217, 13229, 12074, 13516, 13231, 11400, 13488, 11844, 13013, 13232, 11934, 12291, 13230, 12429, 11936, 11399, 12969, 13579, 11743, 13170, 12230, 12000, 13221, 13240] }
+];
+
+function findProduto(campanhaM) {
+  for (var pi = 0; pi < PROD_CAMPANHAS.length; pi++) {
+    if (PROD_CAMPANHAS[pi].test(campanhaM)) return PROD_CAMPANHAS[pi];
+  }
+  return null;
+}
+
+// ============================================================
 // 3. Para cada CODCLI+DATA, buscar faturamento na base 8026
 // ============================================================
 console.log('Enriquecendo dados com faturamento da base 8026...');
@@ -109,6 +129,8 @@ for (var ri = 1; ri < dgRaw.length; ri++) {
   var campaignDateSerial = r[8]; // DATA column (serial)
   var campaignDate = serialToDate(campaignDateSerial);
 
+  // Layout atual do "Dados Geral": col9 vazio, col10=CAMPANHA (disparo), col11=Data,
+  // col12=Total de clientes, col13=Receberam, col14=SLUG
   var row = {
     id: r[0],
     resposta: String(r[1]).trim(),
@@ -119,12 +141,11 @@ for (var ri = 1; ri < dgRaw.length; ri++) {
     supervisor: String(r[6]).trim(),
     campanha: String(r[7]).trim(),
     data: typeof r[8] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[8]) : String(r[8]).trim(),
-    compra: r[9],
-    valor: parseFloat(r[10]) || 0,
-    campanhaM: String(r[11]).trim(),
-    dataN: typeof r[12] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[12]) : String(r[12]).trim(),
-    totalClientes: r[13],
-    receberam: r[14]
+    campanhaM: String(r[10]).trim(),
+    dataN: typeof r[11] === 'number' ? XLSX.SSF.format('dd/mm/yyyy', r[11]) : String(r[11]).trim(),
+    totalClientes: r[12],
+    receberam: r[13],
+    slug: String(r[14]).trim()
   };
 
   // Look up faturamento for this CODCLI after campaign date
@@ -149,6 +170,29 @@ for (var ri = 1; ri < dgRaw.length; ri++) {
     notFound++;
   }
 
+  // OBS: compra do produto específico da campanha (usa a campanha que gerou o lead)
+  var prod = findProduto(row.campanha || row.campanhaM);
+  if (prod) {
+    row.produto = prod.label;
+    var prodFat = 0, prodHas = false;
+    if (codcli && campaignDate && codcliIndex[codcli]) {
+      var pOrders = codcliIndex[codcli];
+      for (var oi2 = 0; oi2 < pOrders.length; oi2++) {
+        var o2 = pOrders[oi2];
+        if (o2.date && campaignDate && o2.date >= campaignDate && prod.prods.indexOf(o2.prod) >= 0) {
+          prodFat += o2.fat;
+          prodHas = true;
+        }
+      }
+    }
+    row.comprouProduto = prodHas ? 'Sim' : 'Não';
+    row.valorProduto = Math.round(prodFat * 100) / 100;
+  } else {
+    row.produto = '';
+    row.comprouProduto = 'Não';
+    row.valorProduto = 0;
+  }
+
   rows.push(row);
 }
 
@@ -159,40 +203,16 @@ console.log('  Com faturamento > 0: ' + withFat);
 console.log('  CODCLI não encontrado: ' + notFound);
 
 // ============================================================
-// 4. Build slugMap: display name -> campInfo key (sheet name)
+// 4. Build slugMap: campanhaM -> slug (usando a coluna SLUG da planilha)
 // ============================================================
 var slugMap = {};
-var campInfoKeys = Object.keys(campInfo);
-
 for (var si = 0; si < rows.length; si++) {
   var sr = rows[si];
-  if (!sr.campanhaM || !sr.dataN) continue;
-
-  var ds = sr.dataN.replace(/\//g, ''); // DDMMYYYY
-  var candidates = campInfoKeys.filter(function(k) {
-    return k.indexOf(ds) === 0;
-  });
-
-  if (candidates.length === 1) {
-    slugMap[sr.campanhaM] = candidates[0];
-  } else if (candidates.length > 1) {
-    // Disambiguate: match first significant word of campanhaM
-    var words = sr.campanhaM.replace('CAMPANHA ', '').split(/[\s|]+/);
-    var best = null;
-    for (var ci = 0; ci < candidates.length; ci++) {
-      var candLower = candidates[ci].toLowerCase();
-      for (var wi = 0; wi < words.length; wi++) {
-        var w = words[wi].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-        if (w.length > 2 && candLower.indexOf(w) >= 0) {
-          best = candidates[ci];
-          break;
-        }
-      }
-      if (best) break;
-    }
-    if (best) {
-      slugMap[sr.campanhaM] = best;
-    }
+  if (sr.campanhaM && sr.slug) {
+    // Chave composta (dataN|campanhaM) resolve campanhas com o mesmo nome em datas diferentes
+    slugMap[sr.dataN + '|' + sr.campanhaM] = sr.slug;
+    // Fallback por nome (primeira ocorrência vence)
+    if (!slugMap[sr.campanhaM]) slugMap[sr.campanhaM] = sr.slug;
   }
 }
 
@@ -205,6 +225,7 @@ if (!campInfo['27072026_FILEMEIOPEITO_TODOS']) {
   };
 }
 slugMap['FILÉ MEIO PEITO | SEM COMPRA | TODOS'] = '27072026_FILEMEIOPEITO_TODOS';
+slugMap['27/07/2026|FILÉ MEIO PEITO | SEM COMPRA | TODOS'] = '27072026_FILEMEIOPEITO_TODOS';
 
 // CARNE MOÍDA II — manual mapping
 slugMap['CAMPANHA CARNE MOÍDA II| SEM COMPRA | TODOS'] = '23072026_CARNEMOIDA2_TODOS';
